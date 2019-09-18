@@ -1,10 +1,15 @@
-import http from 'http';
+import express from 'express'
+
+import { allRoutes } from './routes';
 
 const port = 3000
+const app = express()
 
-export const server = http.createServer((req, res) => {
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.end('Hello World\n');    
-}).listen(port, '127.0.0.1');
+// Initialize all routes
+app.use('/api', allRoutes);
 
-console.log(`Server running at ${port}` );
+app.listen(port, () => {
+    console.log(`Server running at ${port}` );
+})
+
+
