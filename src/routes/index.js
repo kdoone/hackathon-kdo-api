@@ -1,9 +1,10 @@
 import { Router } from 'express'
 const router = Router()
 
-import { getAll } from './get-all';
+import { user } from './user';
+import { differences } from './differences';
 
-router.use('/all', getAll);
+router.use('/user', user)
+router.use('/differences', differences)
 
 export const allRoutes = router
-
