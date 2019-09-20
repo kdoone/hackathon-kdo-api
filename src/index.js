@@ -16,6 +16,7 @@ connect('mongodb://localhost:27017/findDifference',
     console.log('Сonnected to mongodb')
 })
 
+
 // Initialize all routes
 app.use( json() )
 app.use( urlencoded({ extended: true }) )

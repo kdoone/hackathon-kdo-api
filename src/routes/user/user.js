@@ -26,7 +26,7 @@ router.post('/', async(req,res) => {
         findDifferenceAndSend(res, deviceId)        
     }
     catch(err) {
-        throw(err)
+        res.status(500).send(err)        
     }
 })
 

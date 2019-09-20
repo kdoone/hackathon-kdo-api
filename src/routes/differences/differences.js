@@ -11,7 +11,7 @@ router.post('/', async(req,res) => {
         res.send('updated')
     }
     catch(err) {
-        throw(err)
+        res.status(500).send(err)        
     }
 })
 

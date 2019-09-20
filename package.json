@@ -6,8 +6,8 @@
   "scripts": {
     "babel-node": "babel-node --presets=@babel/env ./src/index.js",
     "dev": "nodemon --exec npm run babel-node -- ./dist/index.js",
-    "build": "babel src/index.js -d dist",
-    "serve": "node dist/index.js"
+    "build": "rm -rf dist && mkdir dist && babel src -d dist",
+    "serve": "cd dist && node index.js"
   },
   "author": "",
   "license": "ISC",

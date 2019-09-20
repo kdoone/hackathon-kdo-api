@@ -3,7 +3,7 @@ export const defaultDifferences = [
     id: 0,
     img: "bambi",                   
     defaultLife: 3, 
-    life: 3,
+    life: 3,    
     defaultHint: 2,
     hint: 2,
     isPassed: false,

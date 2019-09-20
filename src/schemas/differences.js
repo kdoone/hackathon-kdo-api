@@ -2,11 +2,11 @@ import { Schema, model } from 'mongoose'
 
 const differences = Schema({
     deviceId: { type: String, required: true },
-    version: { type: Number, required: true },
+    version: { type: String, required: true },
     items: [{
         id: Number,
         img: String,                   
-        defaultLife: Number, 
+        defaultLife: Number,         
         life: Number,
         defaultHint: Number,
         hint: Number,
