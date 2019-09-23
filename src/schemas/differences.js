@@ -5,7 +5,10 @@ const differences = Schema({
     version: { type: String, required: true },
     items: [{
         id: Number,
-        img: String,                   
+        imgList: String,                           
+        imgDescr: String,
+        imgOriginal: String,
+        imgFake: String,
         defaultLife: Number,         
         life: Number,
         defaultHint: Number,

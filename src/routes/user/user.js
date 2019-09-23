@@ -17,7 +17,7 @@ router.post('/', async(req,res) => {
 
         if(!isUserWithId) {
 
-            await saveUser(deviceId)        
+            await saveUser(deviceId, version)        
             await differencesCreate(deviceId, version, defaultDifferences)
             await findDifferenceAndSend(res, deviceId)
             return

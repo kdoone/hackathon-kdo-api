@@ -1,7 +1,10 @@
 export const defaultDifferences = [    
 {               
     id: 0,
-    img: "bambi",                   
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568190423/bambilist_crs3zp.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568191510/bambidescr_bqynkx.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568172371/bambi_original_tamrf7.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568172591/bambi_fake_oba2tm.png",
     defaultLife: 3, 
     life: 3,    
     defaultHint: 2,
@@ -36,8 +39,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 1,
-    img: "butterfly",
+    id: 1,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568190423/butterflylist_vrnfrq.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568191510/butterflydescr_ywmter.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568782132/butterfly_original_awlcsj.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568699026/butterfly_fake_ffih5d.png",
     defaultLife: 3, 
     life: 3,
     defaultHint: 2,
@@ -72,8 +78,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 2,
-    img: "wineglass",
+    id: 2,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195199/wineglass_list_uywl7e.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195199/wineglass_descr_cp8ntn.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195200/wineglass_original_opvcj0.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195200/wineglass_fake_e5hkx5.png",
     defaultLife: 3, 
     defaultHint: 2,
     life: 3,
@@ -108,8 +117,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 3,
-    img: "landscape",
+    id: 3,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195927/landscape_list_afmsba.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195927/landscape_descr_lwxeml.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195927/landscape_original_r27l24.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568195927/landscape_fake_k8ncsf.png",
     defaultLife: 3, 
     defaultHint: 2,
     life: 3,
@@ -144,8 +156,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 4,
-    img: "snake",
+    id: 4,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568196573/snake_list_hs6ptu.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568196573/snake_descr_yfdhkh.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568196573/snake_original_uirirk.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568196573/snake_fake_b8u7bt.png",
     defaultLife: 3, 
     defaultHint: 2,
     life: 3,
@@ -180,13 +195,16 @@ export const defaultDifferences = [
     ]
 },                             
 {               
-    id: 0,
-    img: "giraffe",                
+    id: 5,         
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568190423/giraffelist_uodgfo.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568191510/giraffedescr_hbjsok.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568173501/giraffe_original_kkflvo.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568173501/giraffe_fake_gkscbu.png",   
     defaultLife: 3, 
     defaultHint: 1,
     life: 3,
     hint: 1,
-    isFound: false,
+    isPassed: false,
     points: [
         {
             id: 0,
@@ -216,8 +234,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 1,
-    img: "tiger",
+    id: 6,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568190423/tigerlist_z5avvu.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568191510/tigerdescr_ajwhfm.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568173502/tiger_original_tfrbef.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568173501/tiger_fake_ul2gih.png",
     defaultLife: 3, 
     defaultHint: 1,
     life: 3,
@@ -252,8 +273,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 2,
-    img: "bike",
+    id: 7,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568199751/bike_list_kiquz0.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568199751/bike_descr_a0gju5.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568199752/bike_original_qui3xk.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568199752/bike_fake_c1syvv.png",
     defaultLife: 3, 
     defaultHint: 1,
     life: 3,
@@ -288,8 +312,11 @@ export const defaultDifferences = [
     ]
 },
 {               
-    id: 3,
-    img: "estetic",
+    id: 8,    
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568201995/estetic_list_baoagw.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568201995/estetic_descr_grfhb6.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568201995/estetic_original_xq3hqo.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568201995/estetic_fake_k8i9f7.png",
     defaultLife: 3, 
     defaultHint: 1,
     life: 3,
@@ -325,13 +352,16 @@ export const defaultDifferences = [
 },                                       
 
 {               
-    id: 0,
-    img: "boat",                
+    id: 9,      
+    imgList: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568193854/boat_list_oozre6.png",                   
+    imgDescr: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568193854/boat_descr_ppjnmm.png",
+    imgOriginal: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568193855/boat_original_rgzumw.png",
+    imgFake: "https://res.cloudinary.com/dn0eqgzzp/image/upload/v1568193855/boat_fake_nysejn.png",          
     defaultLife: 3, 
     defaultHint: 1,
     life: 3,
     hint: 1,
-    isFound: false,
+    isPassed: false,
     points: [
         {
             id: 0,

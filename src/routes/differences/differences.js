@@ -5,9 +5,9 @@ const router = Router()
 
 router.post('/', async(req,res) => {
     try {   
-        const { deviceId, updateObj } = req.body
+        const { deviceId, items } = req.body
 
-        await update(deviceId, updateObj)
+        await update(deviceId, items)
         res.send('updated')
     }
     catch(err) {
