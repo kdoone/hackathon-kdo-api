@@ -7,6 +7,6 @@ export const update = (deviceId, updateObj) => {
         
     const toUpdate = {
         'deviceId': deviceId
-    }            
+    }                    
     return Differences.updateOne(toUpdate, generateWhatUpdate(updateObj))
 }
