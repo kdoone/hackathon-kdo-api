@@ -6,7 +6,7 @@ export const updateAllItems = (version) => {
     const toUpdate = {
         'version': version
     }                    
-    return Differences.updateOne(toUpdate, {
+    return Differences.updateMany(toUpdate, {
         items: defaultDifferences
     })
 }
