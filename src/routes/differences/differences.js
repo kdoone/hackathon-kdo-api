@@ -17,10 +17,8 @@ router.post('/', async(req,res) => {
 })
 
 router.post('/update-all', async(req,res) => {
-    try {
-        const { version } = req.body
-
-        await updateAllItems(version)
+    try {        
+        await updateAllItems(0)
         res.send('updated-all')
     }
     catch(err) {

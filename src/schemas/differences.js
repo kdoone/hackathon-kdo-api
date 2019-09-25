@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose'
 
 const differences = Schema({
     deviceId: { type: String, required: true },
-    version: { type: String, required: true },
+    updateId: { type: Number, required: true },
     items: [{
         id: Number,
         imgList: String,                           

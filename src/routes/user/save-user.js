@@ -1,10 +1,9 @@
 import { User } from '../../schemas'
 
-export const saveUser = async(deviceId, version) => {
+export const saveUser = async(deviceId) => {
     try {
         const user = User({
-            deviceId,
-            version
+            deviceId            
         })
 
         await user.save()

@@ -1,10 +1,10 @@
 import { Differences } from "../../schemas";
 import { defaultDifferences } from "./default-differences";
 
-export const updateAllItems = (version) => {    
+export const updateAllItems = (updateId) => {    
         
     const toUpdate = {
-        'version': version
+        'updateId': updateId
     }                    
     return Differences.updateMany(toUpdate, {
         items: defaultDifferences

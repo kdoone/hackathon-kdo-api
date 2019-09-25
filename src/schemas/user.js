@@ -1,8 +1,7 @@
 import { Schema, model } from 'mongoose'
 
 const user = Schema({
-    deviceId: { type: String, required: true },
-    version: { type: String, required: true }       
+    deviceId: { type: String, required: true }      
 });
 
 export const User = model('User', user, 'users');

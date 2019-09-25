@@ -12,13 +12,13 @@ const findDifferenceAndSend = async(res, deviceId) => {
 
 router.post('/', async(req,res) => {
     try {               
-        const { deviceId, version } = req.body
+        const { deviceId } = req.body
         const isUserWithId = await findUser(deviceId)
 
         if(!isUserWithId) {
 
-            await saveUser(deviceId, version)        
-            await differencesCreate(deviceId, version, defaultDifferences)
+            await saveUser(deviceId)        
+            await differencesCreate(deviceId, defaultDifferences)
             await findDifferenceAndSend(res, deviceId)
             return
         }

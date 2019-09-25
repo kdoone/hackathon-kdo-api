@@ -1,11 +1,11 @@
 import { Differences } from "../../schemas";
 
-export const differencesCreate = async(deviceId, version, items) => {
+export const differencesCreate = async(deviceId, items) => {
     try {
         const differencesToCreate = Differences({
-            deviceId,
-            version,
-            items
+            deviceId,            
+            items,
+            updateId: 0
         })
 
         await differencesToCreate.save()
