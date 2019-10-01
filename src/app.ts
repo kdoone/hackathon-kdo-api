@@ -1,4 +1,4 @@
-import express, { json, urlencoded } from 'express';
+import express, { json, urlencoded, Request, Response, NextFunction } from 'express';
 import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 
@@ -34,8 +34,9 @@ app.use(urlencoded({ extended: true }));
 app.get('/get-console', getConsole);
 
 // Error handling
-app.use((err: any, req: any, res: any) => {
-    res.status(500).send('Something broke!');
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    if (!err.statusCode) err.statusCode = 500;
+    res.status(err.statusCode).send(err.message);
 });
 
 

@@ -31,7 +31,7 @@ const updateAllItems = (updateId: number) => {
         'updateId': updateId
     };
     return Differences.updateMany(toUpdate, {
-        items: 'test'
+        items: 'string'
     });
 };
 export const getConsole = async (req: Request, res: Response, next: NextFunction) => {
