@@ -1,15 +1,29 @@
-import { createServer } from 'http';
-import app from './app';
+import { Class } from 'estree';
 
-const server = createServer(app);
+// import { createServer } from 'http';
+// import app from './app';
 
-server.listen(app.get('port'), () => {
-    console.log(
-        'App is running at http://localhost:%d in %s mode',
-        app.get('port'),
-        app.get('env')
-    );
-});
+// const server = createServer(app);
 
-export default server;
+// server.listen(app.get('port'), () => {
+//     console.log(
+//         'App is running at http://localhost:%d in %s mode',
+//         app.get('port'),
+//         app.get('env')
+//     );
+// });
 
+// export default server;
+
+interface Counter {
+    (x: number): number;
+    title: string;
+    tick(): void;
+}
+
+const getCounter = (): Counter => {
+    const counter = ((x: number) => 40) as Counter;
+    counter.title = 'test';
+    counter.tick = function () { console.log('tick'); };
+    return counter;
+};
