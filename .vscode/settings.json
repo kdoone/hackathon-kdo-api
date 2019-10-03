@@ -24,6 +24,7 @@
         "**/dist": true,
         "**/coverage": true
     },
+    "typescript.preferences.importModuleSpecifier": "relative",
     "typescript.referencesCodeLens.enabled": true,
     "appService.zipIgnorePattern": [
         ".vscode{,/**}"
