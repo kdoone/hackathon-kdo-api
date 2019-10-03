@@ -4,14 +4,14 @@ const { printf, timestamp, combine } = format;
 
 const formatDefault = [
     timestamp({
-        format: 'YYYY-MM-DD hh:mm:ss A ZZ'
+        format: 'DD-MM-YYYY HH:mm:ss A ZZ'
     }),
     printf(info => `\n "Time":"${info.timestamp}", "Level":${info.level}, "Message":${info.message}`)
 ];
 
 const formatWithStack = [
     timestamp({
-        format: 'YYYY-MM-DD hh:mm:ss A ZZ'
+        format: 'DD-MM-YYYY HH:mm:ss A ZZ'
     }),
     printf(info => `\n "Time":"${info.timestamp}", "Level":${info.level}, "Message":${info.message} ${info.stack}`)
 ];
