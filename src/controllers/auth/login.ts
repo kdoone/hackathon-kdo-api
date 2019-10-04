@@ -34,6 +34,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return res.json({ user: user.toAuthJSON() });
         }
 
-        return status(400).info;
+        return res.status(400).send(info);
     })(req, res, next);
 };

@@ -4,8 +4,8 @@ import { Strategy as LocalStrategy } from 'passport-local';
 
 
 passport.use(new LocalStrategy({
-    usernameField: 'user[email]',
-    passwordField: 'user[password]',
+    usernameField: 'email',
+    passwordField: 'password',
 }, (email, password, done) => {
     Users.findOne({ email })
         .then((user: UserDocument) => {

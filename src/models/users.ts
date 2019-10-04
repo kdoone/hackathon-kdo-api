@@ -3,7 +3,6 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 export type UserDocument = Document & {
-    username: string;
     password: string;
     email: string;
 
@@ -14,13 +13,9 @@ export type UserDocument = Document & {
 }
 
 const UsersSchema = new Schema({
-    username: {
-        type: String,
-        unique: true
-    },
     password: String,
     email: {
-        type: String, unique: true
+        type: String
     }
 });
 

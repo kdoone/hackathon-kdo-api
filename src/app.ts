@@ -14,7 +14,7 @@ const connectToDb = async (): Promise<void> => {
     try {
         await connect(
             'mongodb://localhost:27017/findDifference',
-            { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: false }
+            { useNewUrlParser: true, useUnifiedTopology: true }
         );
 
         console.log('Connected to Mongodb');
@@ -38,15 +38,16 @@ app.use(
 );
 
 
+
 // Routes
 app.get('/get-console', getConsole);
 app.post('/auth', auth.optional, userCreate);
-app.post('/login');
+app.post('/login', auth.optional, login);
 
 
 
 // Error handling
-app.get('*', notFound);
+
 app.use(errorHandler);
 
 export default app;
