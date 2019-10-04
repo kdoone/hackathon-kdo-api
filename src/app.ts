@@ -4,7 +4,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 
 // Controllers
-import { getConsole, errorHandler, notFound } from './controllers';
+import { getConsole, errorHandler, notFound, auth, login, userCreate } from './controllers';
 
 // Create Express server
 const app = express();
@@ -14,7 +14,7 @@ const connectToDb = async (): Promise<void> => {
     try {
         await connect(
             'mongodb://localhost:27017/findDifference',
-            { useNewUrlParser: true, useUnifiedTopology: true, }
+            { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: false }
         );
 
         console.log('Connected to Mongodb');
@@ -37,8 +37,13 @@ app.use(
     express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
 );
 
+
 // Routes
 app.get('/get-console', getConsole);
+app.post('/auth', auth.optional, userCreate);
+app.post('/login');
+
+
 
 // Error handling
 app.get('*', notFound);

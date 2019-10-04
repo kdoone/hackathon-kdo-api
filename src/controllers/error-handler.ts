@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import { logger } from '../util/logger';
-// Без NextFunction хандлер не будет работать
 
+// Без next хандлер не будет работать
 export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
 
     if (!err.statusCode) err.statusCode = 500;

@@ -1,53 +1,45 @@
 import { LoggerOptions, transports, createLogger, format } from 'winston';
-
 const { printf, timestamp, combine } = format;
 
+// Форматы
+const defaultTimestamp = timestamp({ format: 'DD-MM-YYYY HH:mm:ss A ZZ' });
+
 const formatDefault = [
-    timestamp({
-        format: 'DD-MM-YYYY HH:mm:ss A ZZ'
-    }),
+    defaultTimestamp,
     printf(info => `\n "Time":"${info.timestamp}", "Level":${info.level}, "Message":${info.message}`)
 ];
 
 const formatWithStack = [
-    timestamp({
-        format: 'DD-MM-YYYY HH:mm:ss A ZZ'
-    }),
+    defaultTimestamp,
     printf(info => `\n "Time":"${info.timestamp}", "Level":${info.level}, "Message":${info.message} ${info.stack}`)
 ];
+
+// Создание транспорта для записи логов в файлы
+interface CreateTransportsFile {
+    (filename: string, format: any): any;
+}
+
+const createTransportsFile: CreateTransportsFile = (filename, format) => {
+    return new transports.File({
+        filename,
+        format
+    });
+};
 
 const options: LoggerOptions = {
     level: 'info',
     transports: [
-        new transports.File({
-            filename: '_logs/combined.log',
-            format: combine(
-                ...formatDefault
-            )
-        }),
-        new transports.File({
-            filename: '_logs/error-simple.log',
-            format: combine(
-                ...formatDefault
-            )
-        }),
-        new transports.File({
-            filename: '_logs/error-full.log',
-            format: combine(
-                ...formatWithStack
-            )
-        }),
+        createTransportsFile('_logs/combined.log', combine(...formatDefault)),
+        createTransportsFile('_logs/error-simple.log', combine(...formatDefault)),
+        createTransportsFile('_logs/error-full.log', combine(...formatWithStack))
     ]
 };
 
 export const logger = createLogger(options);
-//
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-// 
-// if (process.env.NODE_ENV !== 'production') {
-//     logger.add(new transports.Console({
-//         format: format.simple()
-//     }));
-// }
-// 
+
+// Если работаем в деве то выводить в консоль
+if (process.env.NODE_ENV !== 'production') {
+    logger.add(new transports.Console({
+        format: combine(...formatDefault)
+    }));
+}

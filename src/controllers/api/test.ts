@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import { Differences } from '../models';
+import { Differences } from '../../models';
 
 const updateAllItems = (updateId: number) => {
     const toUpdate = {
