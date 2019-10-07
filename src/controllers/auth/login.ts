@@ -1,10 +1,9 @@
 
 import { Response, Request, NextFunction } from 'express';
-import { Users } from '../../models';
 import passport from 'passport';
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
-    const { body: { user } } = req;
+export const login = (req: Request, res: Response, next: NextFunction) => {
+    const { user } = req.body;
 
     if (!user.email) {
         return res.status(422).json({
@@ -22,10 +21,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         });
     }
 
-    return passport.authenticate('local', { session: false }, (err, passportUser, info: any) => {
-        if (err) {
-            return next(err);
-        }
+    passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+        if (err) return next(err);
 
         if (passportUser) {
             const user = passportUser;
@@ -36,4 +33,5 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
         return res.status(400).send(info);
     })(req, res, next);
+
 };

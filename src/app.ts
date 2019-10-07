@@ -4,7 +4,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 
 // Controllers
-import { getConsole, errorHandler, notFound, auth, login, userCreate } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword } from './controllers';
 
 // Create Express server
 const app = express();
@@ -14,7 +14,7 @@ const connectToDb = async (): Promise<void> => {
     try {
         await connect(
             'mongodb://localhost:27017/findDifference',
-            { useNewUrlParser: true, useUnifiedTopology: true }
+            { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
         );
 
         console.log('Connected to Mongodb');
@@ -24,7 +24,6 @@ const connectToDb = async (): Promise<void> => {
     }
 };
 connectToDb();
-
 
 // Initialize all routes
 app.set('port', process.env.PORT || 3000);
@@ -37,21 +36,16 @@ app.use(
     express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
 );
 
-
+// Passport config
+import './config/passport';
 
 // Routes
-app.get('/get-console', getConsole);
-app.post('/auth', auth.optional, userCreate);
-app.post('/login', auth.optional, login);
-
-
+app.post('/auth/register', auth.optional, register);
+app.post('/auth/login', auth.optional, login);
+app.post('/auth/reset-password', auth.optional, resetPassword);
 
 // Error handling
-
+app.get('*', notFound);
 app.use(errorHandler);
 
 export default app;
-
-
-
-

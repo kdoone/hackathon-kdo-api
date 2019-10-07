@@ -37,6 +37,7 @@
         "express-session": "^1.16.2",
         "express-validator": "^6.2.0",
         "fbgraph": "^1.4.4",
+        "generate-password": "^1.4.2",
         "http-errors": "^1.7.3",
         "jsonwebtoken": "^8.5.1",
         "lodash": "^4.17.15",
@@ -50,6 +51,7 @@
         "pug": "^2.0.4",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",
+        "uuid": "^3.3.3",
         "winston": "^3.2.1"
     },
     "devDependencies": {
@@ -86,6 +88,7 @@
         "@types/request-promise": "^4.1.44",
         "@types/shelljs": "^0.8.5",
         "@types/supertest": "^2.0.8",
+        "@types/uuid": "^3.4.5",
         "@types/winston": "^2.4.4",
         "@typescript-eslint/eslint-plugin": "^2.3.1",
         "@typescript-eslint/parser": "^2.3.1",

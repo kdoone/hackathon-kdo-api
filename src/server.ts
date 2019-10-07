@@ -12,5 +12,3 @@ server.listen(app.get('port'), (): void => {
 });
 
 export default server;
-
-export { };
