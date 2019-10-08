@@ -21,14 +21,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     }
 
     const finalUser = new Users(user);
-
-    const isEmailExists = await Users.findOne({ email: user.email }, (err, user) => {
-        if (err) return next(err);
-
-        return (user)
-            ? finalUser.emailExists(user.email)
-            : false;
-    });
+    const isEmailExists = await Users.isEmailExists(user.email);
 
     if (isEmailExists) {
         return res.status(409).json({

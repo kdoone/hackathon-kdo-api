@@ -21,5 +21,5 @@ export const auth = {
         userProperty: 'payload',
         getToken: getTokenFromHeaders,
         credentialsRequired: false
-    }),
+    })
 };

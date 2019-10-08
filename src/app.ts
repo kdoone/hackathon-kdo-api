@@ -14,7 +14,7 @@ const connectToDb = async (): Promise<void> => {
     try {
         await connect(
             'mongodb://localhost:27017/findDifference',
-            { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
+            { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }
         );
 
         console.log('Connected to Mongodb');

@@ -6,7 +6,7 @@ import generator from 'generate-password';
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email } = req.body;
-        const isEmailExists = await Users.findOne({ email }, (err, user) => user);
+        const isEmailExists = await Users.isEmailExists(email);
 
         if (!isEmailExists) {
             return res.json({

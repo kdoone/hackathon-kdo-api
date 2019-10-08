@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 import uuidv1 from 'uuid/v1';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
@@ -8,21 +8,28 @@ export type UserDocument = Document & {
     hash: string;
     user: any;
     uid: string;
+    test: any;
     generateJWT: () => string;
     toAuthJSON: () => AuthJson;
     setPassword: (password: string) => any;
     validatePassword: (password: string) => any;
-    emailExists: (email: string) => boolean;
     setUid: () => void;
+    setTest(): any;
+}
+
+export interface UserModel extends Model<UserDocument> {
+    isEmailExists: (email: string) => Promise<any>;
 }
 
 const UsersSchema = new Schema({
-    email: String,
+    email: {
+        type: String,
+        index: true
+    },
     hash: String,
     salt: String,
     uid: String
 });
-
 
 UsersSchema.methods.setPassword = function (this: UserDocument, password: string): void {
     this.salt = crypto.randomBytes(16).toString('hex');
@@ -38,8 +45,8 @@ UsersSchema.methods.validatePassword = function (this: UserDocument, password: s
     return this.hash === hash;
 };
 
-UsersSchema.methods.emailExists = function (this: UserDocument, email: string) {
-    return this.email === email;
+UsersSchema.statics.isEmailExists = async function (email: string): Promise<any> {
+    return this.findOne({ email });
 };
 
 UsersSchema.methods.generateJWT = function (this: UserDocument): string {
@@ -70,4 +77,4 @@ UsersSchema.methods.toAuthJSON = function (this: UserDocument): AuthJson {
     };
 };
 
-export const Users = model<UserDocument>('Users', UsersSchema, 'user');
+export const Users = model<UserDocument, UserModel>('User', UsersSchema, 'users');
