@@ -14,7 +14,6 @@ export type UserDocument = Document & {
     setPassword: (password: string) => any;
     validatePassword: (password: string) => any;
     setUid: () => void;
-    setTest(): any;
 }
 
 export interface UserModel extends Model<UserDocument> {

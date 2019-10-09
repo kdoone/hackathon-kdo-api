@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
 import { Users } from '../../models';
-
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     const { user } = req.body;
 
