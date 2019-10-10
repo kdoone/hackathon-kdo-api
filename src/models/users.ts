@@ -45,7 +45,7 @@ UsersSchema.methods.validatePassword = function (this: UserDocument, password: s
 };
 
 UsersSchema.statics.isEmailExists = async function (email: string): Promise<any> {
-    return this.findOne({ email });
+    return this.exists({ email });
 };
 
 UsersSchema.methods.generateJWT = function (this: UserDocument): string {

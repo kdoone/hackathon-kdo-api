@@ -1,4 +1,5 @@
-export * from './api';
+export * from './auth';
 export * from './error-handler';
 export * from './not-found';
-export * from './auth';
+// Баг если назвать папку просто api
+export * from './_api';

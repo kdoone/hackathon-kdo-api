@@ -32,6 +32,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
     finalUser.setPassword(user.password);
     finalUser.setUid();
-    finalUser.save()
-        .then(() => res.json({ user: finalUser.toAuthJSON() }));
+    finalUser.save((err, user) => {
+        if (err) return next(err);
+
+        res.json({
+            user: user.toAuthJSON()
+        });
+    });
 };

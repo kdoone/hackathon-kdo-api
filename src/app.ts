@@ -2,10 +2,8 @@ import express, { json, urlencoded } from 'express';
 import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
-
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword } from './controllers';
-
+import { errorHandler, notFound, auth, register, login, resetPassword, test } from './controllers';
 // Create Express server
 const app = express();
 
@@ -43,6 +41,8 @@ import './config/passport';
 app.post('/auth/register', auth.optional, register);
 app.post('/auth/login', auth.optional, login);
 app.post('/auth/reset-password', auth.optional, resetPassword);
+app.post('/api/test', test);
+
 
 // Error handling
 app.get('*', notFound);
