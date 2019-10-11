@@ -1,13 +1,13 @@
 import passport from 'passport';
 import { Strategy as LocalStategy } from 'passport-local';
-import { Users } from '../models';
+import { User } from '../models';
 
 passport.use(new LocalStategy({
-    usernameField: 'user[email]',
-    passwordField: 'user[password]',
+    usernameField: 'email',
+    passwordField: 'password',
     session: false
 }, (email, password, done) => {
-    Users.findOne({ email }, (err, user) => {
+    User.findOne({ email }, (err, user) => {
         if (err) return done(err);
 
         // if email is incorrect

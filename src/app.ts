@@ -3,7 +3,7 @@ import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword, test } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword, test, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest } from './controllers';
 // Create Express server
 const app = express();
 
@@ -37,15 +37,25 @@ app.use(
 // Passport config
 import './config/passport';
 
-// Routes
+// *** Routes
+
+// Auth
 app.post('/auth/register', auth.optional, register);
 app.post('/auth/login', auth.optional, login);
 app.post('/auth/reset-password', auth.optional, resetPassword);
-app.post('/api/test', test);
-
+app.post('/auth/change-password', auth.required, changePassword);
+// Rating
+app.get('/api/local-rating', auth.required, getLocalRating);
+app.get('/api/world-rating', auth.required, getWorldRating);
+app.post('/api/local-rating', auth.required, changeLocalRating);
+app.get('/api/test', auth.required, test);
+// Friend
+app.post('/api/friend-request', auth.required, friendRequest);
 
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);
+
+// *** Routes
 
 export default app;

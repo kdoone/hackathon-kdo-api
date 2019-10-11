@@ -1,26 +1,19 @@
 import { Response, Request, NextFunction } from 'express';
-import { Users } from '../../models';
+import { User, Rating } from '../../models';
+import { isRequired } from '../../util/is-required';
+
 export const register = async (req: Request, res: Response, next: NextFunction) => {
-    const { user } = req.body;
+    const { email, password, username } = req.body;
 
-    if (!user.email) {
-        return res.status(422).json({
-            errors: {
-                email: 'is required'
-            }
-        });
-    }
+    if (!email) return isRequired(res, 'email');
+    if (!password) return isRequired(res, 'password');
+    if (!username) return isRequired(res, 'username');
 
-    if (!user.password) {
-        return res.status(422).json({
-            errors: {
-                password: 'is required'
-            }
-        });
-    }
-
-    const finalUser = new Users(user);
-    const isEmailExists = await Users.isEmailExists(user.email);
+    const finalUser = new User({
+        email,
+        username
+    });
+    const isEmailExists = await User.isEmailExists(email);
 
     if (isEmailExists) {
         return res.status(409).json({
@@ -30,13 +23,22 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         });
     }
 
-    finalUser.setPassword(user.password);
+    finalUser.setPassword(password);
     finalUser.setUid();
+
+    // Создаем нулевой рейтинг
+    const rating = new Rating({
+        publicId: finalUser._id,
+        record: 0
+    });
+
+    await rating.save((err) => {
+        if (err) next(err);
+    });
+
     finalUser.save((err, user) => {
         if (err) return next(err);
 
-        res.json({
-            user: user.toAuthJSON()
-        });
+        res.json(user.toAuthJSON());
     });
 };

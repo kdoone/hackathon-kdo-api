@@ -1,54 +1,63 @@
-import { Schema, model, Document, Model } from 'mongoose';
-import uuidv1 from 'uuid/v1';
+import { Schema, Document, Model } from 'mongoose';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
-export type UserDocument = Document & {
+import generator from 'generate-password';
+
+const { ObjectId } = Schema.Types;
+export interface UserDocument extends Document {
     email: string;
     salt: string;
     hash: string;
     user: any;
     uid: string;
     test: any;
+    username: string;
     generateJWT: () => string;
     toAuthJSON: () => AuthJson;
     setPassword: (password: string) => any;
     validatePassword: (password: string) => any;
     setUid: () => void;
+    friends: any;
 }
 
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
 }
 
-const UsersSchema = new Schema({
+export const UserSchema = new Schema({
     email: {
         type: String,
         index: true
     },
+    username: String,
     hash: String,
     salt: String,
-    uid: String
-});
+    uid: String,
+    friends: [{ type: ObjectId, ref: 'Friend' }]
+}, { timestamps: true });
 
-UsersSchema.methods.setPassword = function (this: UserDocument, password: string): void {
+UserSchema.methods.setPassword = function (this: UserDocument, password: string): void {
     this.salt = crypto.randomBytes(16).toString('hex');
     this.hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UsersSchema.methods.setUid = function (this: UserDocument): void {
-    this.uid = uuidv1();
+UserSchema.methods.setUid = function (this: UserDocument): void {
+    this.uid = generator.generate({
+        length: 6,
+        uppercase: false,
+    });
 };
 
-UsersSchema.methods.validatePassword = function (this: UserDocument, password: string): boolean {
+UserSchema.methods.validatePassword = function (this: UserDocument, password: string): boolean {
     const hash = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
     return this.hash === hash;
 };
 
-UsersSchema.statics.isEmailExists = async function (email: string): Promise<any> {
+UserSchema.statics.isEmailExists = async function (email: string): Promise<any> {
     return this.exists({ email });
 };
 
-UsersSchema.methods.generateJWT = function (this: UserDocument): string {
+UserSchema.methods.generateJWT = function (this: UserDocument): string {
     const today: Date = new Date();
     const expirationDate: Date = new Date(today);
     expirationDate.setDate(today.getDate() + 60);
@@ -65,15 +74,22 @@ interface AuthJson {
     email: string;
     token: string;
     uid: string;
+    username: string;
 }
 
-UsersSchema.methods.toAuthJSON = function (this: UserDocument): AuthJson {
+UserSchema.methods.toAuthJSON = function (this: UserDocument): AuthJson {
     return {
         _id: this._id,
         email: this.email,
+        username: this.username,
         token: this.generateJWT(),
         uid: this.uid
     };
 };
 
-export const Users = model<UserDocument, UserModel>('User', UsersSchema, 'users');
+UserSchema.virtual('ownRating', {
+    ref: 'Rating',
+    localField: '_id',
+    foreignField: 'publicId',
+    justOne: true
+});

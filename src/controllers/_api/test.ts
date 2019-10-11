@@ -1,10 +1,14 @@
 import { Response, Request, NextFunction } from 'express';
-import { Person, Band } from '../../models';
+import { Rating } from '../../models';
 
-export const test = async (req: Request, res: Response, next: NextFunction) => {
+interface Test extends Request {
+    payload: any;
+}
 
-    await Person.deleteOne({ name: 'Slash' });
-    res.send('done');
+export const test = async (req: Test, res: Response, next: NextFunction) => {
+    const { payload: { id } } = req;
+
+    console.log(id);
 };
 
 

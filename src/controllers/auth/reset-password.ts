@@ -1,12 +1,16 @@
 import { Response, Request, NextFunction } from 'express';
-import { Users } from '../../models';
+import { User } from '../../models';
 import { createTransport } from 'nodemailer';
 import generator from 'generate-password';
+import { isRequired } from '../../util/is-required';
 
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email } = req.body;
-        const isEmailExists = await Users.isEmailExists(email);
+
+        if (!email) return isRequired(res, 'email');
+
+        const isEmailExists = await User.isEmailExists(email);
 
         if (!isEmailExists) {
             return res.json({
@@ -14,7 +18,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
                 message: 'Введенный email не существует'
             });
         }
-
+        // 
         const transporter = createTransport({
             host: 'smtp.yandex.ru',
             port: 465,
@@ -33,10 +37,10 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
                     numbers: true
                 });
                 // Создаю ссылки на экземлпяр чтобы не мутировать основной класс
-                const user = new Users();
+                const user = new User();
                 user.setPassword(password);
 
-                await Users.findOneAndUpdate({ email }, { hash: user.hash, salt: user.salt });
+                await User.findOneAndUpdate({ email }, { hash: user.hash, salt: user.salt });
 
                 await transporter.sendMail({
                     from: '"Boom Brains" <kazdevops@yandex.kz>',
