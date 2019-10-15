@@ -3,7 +3,7 @@ import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword, test, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating } from './controllers';
 // Create Express server
 const app = express();
 
@@ -46,11 +46,14 @@ app.post('/auth/reset-password', auth.optional, resetPassword);
 app.post('/auth/change-password', auth.required, changePassword);
 // Rating
 app.get('/api/local-rating', auth.required, getLocalRating);
-app.get('/api/world-rating', auth.required, getWorldRating);
 app.post('/api/local-rating', auth.required, changeLocalRating);
-app.get('/api/test', auth.required, test);
+app.get('/api/world-rating', auth.required, getWorldRating);
+app.get('/api/friend-rating', auth.required, getFriendRating);
+app.post('/api/rating', auth.required, createRating);
 // Friend
 app.post('/api/friend-request', auth.required, friendRequest);
+app.post('/api/friend-accept', auth.required, friendAccept);
+app.post('/api/friend-reject', auth.required, friendReject);
 
 // Error handling
 app.get('*', notFound);

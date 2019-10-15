@@ -1,6 +1,16 @@
-import { Schema } from 'mongoose';
+import { Schema, Document, Model } from 'mongoose';
 
 const { ObjectId } = Schema.Types;
+
+export interface FriendDocument extends Document {
+    requester: string;
+    recipient: string;
+    status: number;
+}
+
+export interface FriendModel extends Model<FriendDocument> {
+    isRequestExists: (myUserId: string, requestedUserId: string) => Promise<any>;
+}
 
 export const FriendSchema = new Schema({
     requester: { type: ObjectId, ref: 'User' },
@@ -15,3 +25,7 @@ export const FriendSchema = new Schema({
         ]
     }
 }, { timestamps: true });
+
+FriendSchema.statics.isRequestExists = async function (myUserId: string, requestedUserId: string): Promise<any> {
+    return this.exists({ requester: myUserId, recipient: requestedUserId });
+}; 

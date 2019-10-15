@@ -2,11 +2,13 @@ import { Schema, Document } from 'mongoose';
 const { ObjectId } = Schema.Types;
 
 export interface RatingDocument extends Document {
-    publicId: string;
+    game: string;
     record: number;
+    user: any;
 }
 
 export const RatingSchema = new Schema({
-    publicId: { type: ObjectId, ref: 'User' },
-    record: Number
+    game: String,
+    record: Number,
+    user: { type: ObjectId, ref: 'User' }
 });

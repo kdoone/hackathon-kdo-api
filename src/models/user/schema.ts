@@ -18,10 +18,12 @@ export interface UserDocument extends Document {
     validatePassword: (password: string) => any;
     setUid: () => void;
     friends: any;
+    record: any;
 }
 
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
+    getId: (email: string) => Promise<any>;
 }
 
 export const UserSchema = new Schema({
@@ -33,7 +35,8 @@ export const UserSchema = new Schema({
     hash: String,
     salt: String,
     uid: String,
-    friends: [{ type: ObjectId, ref: 'Friend' }]
+    friends: [{ type: ObjectId, ref: 'Friend' }],
+    records: [{ type: ObjectId, ref: 'Rating' }]
 }, { timestamps: true });
 
 UserSchema.methods.setPassword = function (this: UserDocument, password: string): void {
@@ -55,6 +58,10 @@ UserSchema.methods.validatePassword = function (this: UserDocument, password: st
 
 UserSchema.statics.isEmailExists = async function (email: string): Promise<any> {
     return this.exists({ email });
+};
+
+UserSchema.statics.getId = async function (email: string): Promise<any> {
+    return this.findOne({ email });
 };
 
 UserSchema.methods.generateJWT = function (this: UserDocument): string {

@@ -1,27 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
-import { Rating } from '../../../models';
+import { Rating, User } from '../../../models';
 
-export const getWorldRating = (req: Request, res: Response, next: NextFunction) => {
+export const getWorldRating = async (req: Request, res: Response, next: NextFunction) => {
 
-    Rating.aggregate([
-        {
-            $group: {
-                _id: '$_id',
-                record: {
-                    '$first': '$record'
+    try {
+        const arr = await Rating.aggregate([
+
+            {
+                '$lookup': {
+                    from: 'user',
+                    localField: 'user',
+                    foreignField: 'records',
+                    as: 'record_objects'
                 }
-            }
-        },
-        {
-            $sort: {
-                record: -1
-            }
-        }
-    ])
-        .exec((err, rating) => {
-            if (err) next(err);
+            },
+        ]);
 
-            res.json(rating);
-        });
+
+        res.json(arr);
+
+    }
+    catch (err) {
+        next(err);
+    }
+
 
 };
