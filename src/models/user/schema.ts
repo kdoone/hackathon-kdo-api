@@ -24,7 +24,7 @@ export interface UserDocument extends Document {
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
     isUsernameExists: (username: string) => Promise<any>;
-    getId: (email: string) => Promise<any>;
+    getId: (key: string, value: any) => Promise<any>;
 }
 
 export const UserSchema = new Schema({
@@ -66,8 +66,8 @@ UserSchema.statics.isUsernameExists = async function (username: string): Promise
     return this.exists({ username });
 };
 
-UserSchema.statics.getId = async function (email: string): Promise<any> {
-    return this.findOne({ email });
+UserSchema.statics.getId = async function (key: string, value: any): Promise<any> {
+    return this.findOne({ [key]: value });
 };
 
 UserSchema.methods.generateJWT = function (this: UserDocument): string {

@@ -6,16 +6,17 @@ import { alreadyExists } from '../../../util';
 
 export const friendRequest = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { email } = req.body;
-        if (!email) return isRequired(res, 'email');
+        const { username } = req.body;
+        if (!username) return isRequired(res, 'username');
 
         const { id: myUserId } = req.payload;
-        const { _id: requestedUserId } = await User.getId(email);
+        const { _id: requestedUserId } = await User.getId('username', username);
 
         // Проверяем чтобы юзер не отправил запрос себе
-        const { email: myEmail } = await User.findById(myUserId, 'email');
-        if (myEmail === email) {
-            return res.status(500).send('Cant request own email');
+        const { username: myUsername } = await User.findById(myUserId, 'username');
+
+        if (myUsername === username) {
+            return res.status(500).send('Cant request own username');
         }
 
         // Проверяем, существует ли такой запрос

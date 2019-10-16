@@ -5,11 +5,18 @@ import { isRequired } from '../../../util/is-required';
 
 export const friendAccept = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { email } = req.body;
-        if (!email) return isRequired(res, 'email');
+        const { username } = req.body;
+        if (!username) return isRequired(res, 'username');
 
         const { id: myUserId } = req.payload;
-        const { _id: requestedUserId } = await User.getId(email);
+        const { _id: requestedUserId } = await User.getId('username', username);
+
+        // Проверяем чтобы юзер не отправил запрос себе
+        const { username: myUsername } = await User.findById(myUserId, 'username');
+
+        if (myUsername === username) {
+            return res.status(500).send('Cant accept own username');
+        }
 
         await Friend.findOneAndUpdate(
             { requester: myUserId, recipient: requestedUserId },
