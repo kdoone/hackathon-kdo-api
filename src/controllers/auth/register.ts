@@ -1,6 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
 import { isRequired } from '../../util/is-required';
+import { alreadyExists } from '../../util';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -11,15 +12,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         if (!username) return isRequired(res, 'username');
 
         const isEmailExists = await User.isEmailExists(email);
+        const isUsernameExists = await User.isUsernameExists(username);
 
-        if (isEmailExists) {
-            return res.status(409).json({
-                errors: {
-                    email: 'already exists'
-                }
-            });
-        }
-        // 
+        if (isEmailExists) return alreadyExists(res, 'email');
+        if (isUsernameExists) return alreadyExists(res, 'username');
+
         // Создаем id для рейтинга и user                
         const finalUser = new User({
             email,

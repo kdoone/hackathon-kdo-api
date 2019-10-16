@@ -23,6 +23,7 @@ export interface UserDocument extends Document {
 
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
+    isUsernameExists: (username: string) => Promise<any>;
     getId: (email: string) => Promise<any>;
 }
 
@@ -46,7 +47,8 @@ UserSchema.methods.setPassword = function (this: UserDocument, password: string)
 
 UserSchema.methods.setUid = function (this: UserDocument): void {
     this.uid = generator.generate({
-        length: 6,
+        length: 7,
+        numbers: true,
         uppercase: false,
     });
 };
@@ -58,6 +60,10 @@ UserSchema.methods.validatePassword = function (this: UserDocument, password: st
 
 UserSchema.statics.isEmailExists = async function (email: string): Promise<any> {
     return this.exists({ email });
+};
+
+UserSchema.statics.isUsernameExists = async function (username: string): Promise<any> {
+    return this.exists({ username });
 };
 
 UserSchema.statics.getId = async function (email: string): Promise<any> {

@@ -3,7 +3,7 @@ import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatuses, getStatusesOutgoing } from './controllers';
 // Create Express server
 const app = express();
 
@@ -54,6 +54,7 @@ app.post('/api/rating', auth.required, createRating);
 app.post('/api/friend-request', auth.required, friendRequest);
 app.post('/api/friend-accept', auth.required, friendAccept);
 app.post('/api/friend-reject', auth.required, friendReject);
+app.get('/api/status-outgoing', auth.required, getStatusesOutgoing);
 
 // Error handling
 app.get('*', notFound);

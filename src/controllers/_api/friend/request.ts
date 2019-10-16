@@ -2,6 +2,7 @@ import { Response, NextFunction } from 'express';
 import { ReqWithPayload } from '../../../types/req-with-payload';
 import { User, Friend } from '../../../models';
 import { isRequired } from '../../../util/is-required';
+import { alreadyExists } from '../../../util';
 
 export const friendRequest = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
@@ -19,9 +20,7 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
 
         // Проверяем, существует ли такой запрос
         const isRequestExists = await Friend.isRequestExists(myUserId, requestedUserId);
-        if (isRequestExists) return res.status(409).json({
-            message: 'request already exists'
-        });
+        if (isRequestExists) return alreadyExists(res, 'request');
 
         const docA = await Friend.findOneAndUpdate(
             { requester: myUserId, recipient: requestedUserId },
