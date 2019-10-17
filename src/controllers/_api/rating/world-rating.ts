@@ -27,7 +27,28 @@ export const getWorldRating = async (req: Request, res: Response, next: NextFunc
 
         const arrCopy: any = arr.slice();
 
-        const arrToTotal = arrCopy.map((item: any) => {
+        interface Records {
+            _id: string;
+            game: string;
+            // user is object id
+            user: string;
+            record: number;
+        }
+
+        interface ItemOfArrTotal {
+            records: Records[];
+            username: string;
+            email: string;
+        }
+
+        interface ArrToTotal {
+            _id?: string;
+            username: string;
+            email: string;
+            totalRecord: number;
+        }
+
+        const arrToTotal = arrCopy.map((item: ItemOfArrTotal): ArrToTotal => {
             // Документ в объект                        
             // Убираем records
             const { records, ...withoutRecords } = item;
@@ -39,20 +60,12 @@ export const getWorldRating = async (req: Request, res: Response, next: NextFunc
                 };
             }
 
-            if (records.length === 1) {
-                return {
-                    ...withoutRecords,
-                    totalRecord: records[0].record
-                };
-            }
-
             // Нужно превратить records в один рекорд сложив все значения
-            const totalRecord = records.reduce((prev: any, cur: any) => {
-                const { record: prevRecord = 0 } = prev;
+            const totalRecord: any = records.reduce((prev: number, cur: any) => {
                 const { record: curRecord = 0 } = cur;
 
-                return prevRecord + curRecord;
-            });
+                return prev + curRecord;
+            }, 0);
 
             return {
                 ...withoutRecords,
@@ -63,7 +76,6 @@ export const getWorldRating = async (req: Request, res: Response, next: NextFunc
         const arrSorted = arrToTotal.sort((a: any, b: any) => a.totalRecord < b.totalRecord);
 
         res.json(arrSorted);
-
     }
     catch (err) {
         next(err);

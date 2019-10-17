@@ -33,26 +33,18 @@ export const getFriendRating = async (req: ReqWithPayload, res: Response, next: 
                 return;
             }
 
-            if (!recipient.records.length) {
+            if (!records.length) {
                 return {
                     ...withoutRecords,
                     totalRecord: 0
                 };
             }
 
-            if (records.length === 1) {
-                return {
-                    ...withoutRecords,
-                    totalRecord: records[0].record
-                };
-            }
-
-            const totalRecord: number = recipient.records.reduce((prev: any, cur: any): number => {
-                const { record: prevRecord = 0 } = prev;
+            const totalRecord: any = records.reduce((prev: number, cur: any) => {
                 const { record: curRecord = 0 } = cur;
 
-                return prevRecord + curRecord;
-            });
+                return prev + curRecord;
+            }, 0);
 
             return {
                 ...withoutRecords,
