@@ -4,6 +4,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 // Controllers
 import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming } from './controllers';
+import { checkUserAgent } from './util';
 // Create Express server
 const app = express();
 
@@ -40,8 +41,9 @@ import './config/passport';
 // *** Routes
 
 // Auth
-app.post('/auth/register', auth.optional, register);
-app.post('/auth/login', auth.optional, login);
+
+app.post('/auth/register', auth.optional, checkUserAgent, register);
+app.post('/auth/login', auth.optional, checkUserAgent, login);
 app.post('/auth/reset-password', auth.optional, resetPassword);
 app.post('/auth/change-password', auth.required, changePassword);
 // Rating
