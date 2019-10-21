@@ -6,7 +6,6 @@ import { alreadyExists } from '../../util';
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        console.log('kek');
         const { email, password, username } = req.body;
 
         if (!email) return isRequired(res, 'email');

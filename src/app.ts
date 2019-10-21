@@ -44,7 +44,7 @@ import './config/passport';
 
 app.post('/auth/register', auth.optional, checkUserAgent, register);
 app.post('/auth/login', auth.optional, checkUserAgent, login);
-app.post('/auth/reset-password', auth.optional, resetPassword);
+app.post('/auth/reset-password', auth.optional, checkUserAgent, resetPassword);
 app.post('/auth/change-password', auth.required, changePassword);
 // Rating
 app.get('/api/local-rating', auth.required, getLocalRating);
