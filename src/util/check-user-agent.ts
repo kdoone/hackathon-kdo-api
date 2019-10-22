@@ -3,7 +3,7 @@ import { ExtendedError } from './extended-error';
 
 export const checkUserAgent = (req: Request, res: Response, next: NextFunction) => {
 
-    if (req.get('User-agent') === 'BoomBrains') {
+    if (req.get('Secret-key') === 'BoomBrains') {
         return next();
     }
 
