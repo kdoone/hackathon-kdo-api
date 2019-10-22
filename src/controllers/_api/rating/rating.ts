@@ -8,8 +8,8 @@ export const createRating = async (req: ReqWithPayload, res: Response, next: Nex
         const { id: myUserId } = req.payload;
         const { game, record } = req.body;
 
-        if (!game) return isRequired(res, 'game');
-        if (!record) return isRequired(res, 'record');
+        if (!game) return isRequired('game', next);
+        if (!record) return isRequired('record', next);
 
         const rating = await Rating.findOneAndUpdate(
             { game, user: myUserId },

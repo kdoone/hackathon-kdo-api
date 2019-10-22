@@ -1,6 +1,13 @@
-import { Response } from 'express';
+import { NextFunction } from 'express';
+import { ExtendedError } from './extended-error';
+export const alreadyExists = (name: string, next: NextFunction) => {
+    const message = name + ' already exists';
+    const err = new ExtendedError(message);
 
-export const alreadyExists = (res: Response, name: string) => res.status(409).json({
-    message: name + ' already exists',
-    subject: name
-});
+    err.statusCode = 409;
+    err.response = {
+        message
+    };
+
+    return next(err);
+};

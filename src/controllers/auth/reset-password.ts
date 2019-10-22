@@ -8,7 +8,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
     try {
         const { email } = req.body;
 
-        if (!email) return isRequired(res, 'email');
+        if (!email) return isRequired('email', next);
 
         const isEmailExists = await User.isEmailExists(email);
 

@@ -41,7 +41,6 @@ import './config/passport';
 // *** Routes
 
 // Auth
-
 app.post('/auth/register', auth.optional, checkUserAgent, register);
 app.post('/auth/login', auth.optional, checkUserAgent, login);
 app.post('/auth/reset-password', auth.optional, checkUserAgent, resetPassword);

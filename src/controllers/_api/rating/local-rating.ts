@@ -25,7 +25,7 @@ export const changeLocalRating = async (req: ReqWithPayload, res: Response, next
         const { record } = req.body;
         const { id } = req.payload;
 
-        if (!record) return isRequired(res, 'record');
+        if (!record) return isRequired('record', next);
 
         Rating.findOneAndUpdate({ publicId: id }, { record }, (err) => {
             if (err) next(err);

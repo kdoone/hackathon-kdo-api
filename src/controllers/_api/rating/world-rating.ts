@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../../../models';
 
-export const getWorldRating = async (req: any, res: Response, next: NextFunction) => {
+export const getWorldRating = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const arr = await User.aggregate([

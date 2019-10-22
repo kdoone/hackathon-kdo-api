@@ -6,7 +6,7 @@ import { isRequired } from '../../../util/is-required';
 export const friendAccept = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { username } = req.body;
-        if (!username) return isRequired(res, 'username');
+        if (!username) return isRequired('username', next);
 
         const { id: myUserId } = req.payload;
         const { _id: requestedUserId } = await User.getId('username', username);

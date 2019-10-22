@@ -8,15 +8,15 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         const { email, password, username } = req.body;
 
-        if (!email) return isRequired(res, 'email');
-        if (!password) return isRequired(res, 'password');
-        if (!username) return isRequired(res, 'username');
+        if (!email) return isRequired('email', next);
+        if (!password) return isRequired('password', next);
+        if (!username) return isRequired('username', next);
 
         const isEmailExists = await User.isEmailExists(email);
         const isUsernameExists = await User.isUsernameExists(username);
 
-        if (isEmailExists) return alreadyExists(res, 'email');
-        if (isUsernameExists) return alreadyExists(res, 'username');
+        if (isEmailExists) return alreadyExists('email', next);
+        if (isUsernameExists) return alreadyExists('username', next);
 
         // Создаем id для рейтинга и user                
         const finalUser = new User({

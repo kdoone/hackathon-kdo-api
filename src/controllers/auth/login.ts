@@ -5,8 +5,8 @@ import { isRequired } from '../../util/is-required';
 export const login = (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    if (!email) return isRequired(res, 'email');
-    if (!password) return isRequired(res, 'password');
+    if (!email) return isRequired('email', next);
+    if (!password) return isRequired('password', next);
 
     passport.authenticate('local', { session: false }, (err, passportUser, info) => {
         if (err) return next(err);

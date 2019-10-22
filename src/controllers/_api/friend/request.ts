@@ -7,7 +7,7 @@ import { alreadyExists } from '../../../util';
 export const friendRequest = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { username } = req.body;
-        if (!username) return isRequired(res, 'username');
+        if (!username) return isRequired('username', next);
 
         const { id: myUserId } = req.payload;
         const { _id: requestedUserId } = await User.getId('username', username);
@@ -21,7 +21,7 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
 
         // Проверяем, существует ли такой запрос
         const isRequestExists = await Friend.isRequestExists(myUserId, requestedUserId);
-        if (isRequestExists) return alreadyExists(res, 'request');
+        if (isRequestExists) return alreadyExists('request', next);
 
         const docA = await Friend.findOneAndUpdate(
             { requester: myUserId, recipient: requestedUserId },

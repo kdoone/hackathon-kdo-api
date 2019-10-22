@@ -6,8 +6,8 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
     try {
         const { password, id } = req.body;
 
-        if (!password) return isRequired(res, 'password');
-        if (!id) return isRequired(res, 'id');
+        if (!password) return isRequired('password', next);
+        if (!id) return isRequired('id', next);
 
         // хэшируем пароль
         const user = new User();
