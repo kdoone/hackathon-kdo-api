@@ -1,4 +1,5 @@
 import express, { json, urlencoded } from 'express';
+import cors from 'cors';
 import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
@@ -28,6 +29,7 @@ connectToDb();
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
+app.use(cors());
 app.use(compression());
 app.use(json());
 app.use(urlencoded({ extended: true }));
