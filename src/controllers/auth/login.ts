@@ -2,23 +2,29 @@ import { Response, Request, NextFunction } from 'express';
 import passport from 'passport';
 import { isRequired } from '../../util/is-required';
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+export const login = async (req: Request, res: Response, next: NextFunction) => {
 
-    if (!email) return isRequired('email', next);
-    if (!password) return isRequired('password', next);
+    try {
+        const { email, password } = req.body;
 
-    passport.authenticate('local', { session: false }, (err, passportUser, info) => {
-        if (err) return next(err);
+        if (!email) return isRequired('email', next);
+        if (!password) return isRequired('password', next);
 
-        if (passportUser) {
-            const user = passportUser;
-            user.token = passportUser.generateJWT();
+        passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+            if (err) return next(err);
 
-            res.json(user.toAuthJSON());
-        }
+            if (passportUser) {
+                const user = passportUser;
+                user.token = passportUser.generateJWT();
 
-        return res.status(400).send(info);
-    })(req, res, next);
+                res.json(user.toAuthJSON());
+            }
+
+            return res.status(400).send(info);
+        })(req, res, next);
+    }
+    catch (err) {
+        next(err);
+    }
 
 };

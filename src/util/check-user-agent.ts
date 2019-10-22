@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { ExtendedError } from './extended-error';
 
 export const checkUserAgent = (req: Request, res: Response, next: NextFunction) => {
 
@@ -6,8 +7,7 @@ export const checkUserAgent = (req: Request, res: Response, next: NextFunction) 
         return next();
     }
 
-    return res.json({
-        message: 'secret is not allowed'
-    });
+    const error = new ExtendedError('secret is not allowed');
+    throw error;
 
 };
