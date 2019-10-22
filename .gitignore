@@ -10,6 +10,7 @@ lib-cov
 
 pids
 logs
+_logs
 results
 tmp
 

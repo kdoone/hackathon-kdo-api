@@ -65,6 +65,7 @@
         "@types/compression": "^1.0.1",
         "@types/concurrently": "^4.1.0",
         "@types/connect-mongo": "^0.0.43",
+        "@types/cors": "^2.8.6",
         "@types/dotenv": "^6.1.1",
         "@types/ejs": "^2.6.3",
         "@types/errorhandler": "^0.0.32",
