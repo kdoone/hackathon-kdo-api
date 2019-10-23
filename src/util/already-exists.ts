@@ -11,6 +11,7 @@ export const alreadyExists = (name: string, next: NextFunction) => {
             break;
         case 'username':
             resStatusCode = 2;
+            break;
         default:
             resStatusCode = 0;
     }
