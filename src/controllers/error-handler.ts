@@ -8,8 +8,6 @@ export const errorHandler = (err: ExtendedError, req: Request, res: Response, ne
     if (!err.statusCode) err.statusCode = 500;
     if (!err.response) err.response = err.message;
 
-    console.log('kek');
-
     logger.log({
         level: 'error',
         message: err.message,
