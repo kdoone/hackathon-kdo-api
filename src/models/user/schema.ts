@@ -83,6 +83,8 @@ UserSchema.methods.generateJWT = function (this: UserDocument): string {
 };
 
 interface AuthJson {
+    status: string;
+    statusCode: number;
     _id: string;
     email: string;
     token: string;
@@ -92,6 +94,8 @@ interface AuthJson {
 
 UserSchema.methods.toAuthJSON = function (this: UserDocument): AuthJson {
     return {
+        status: 'accepted',
+        statusCode: 0,
         _id: this._id,
         email: this.email,
         username: this.username,

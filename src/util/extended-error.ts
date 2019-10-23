@@ -1,10 +1,5 @@
-interface ErrorResponse {
-    message: string;
-    subject?: string;
-}
-
 export class ExtendedError extends Error {
-    response?: ErrorResponse | string
+    response?: any
     shouldRedirect?: boolean
     statusCode?: number
     constructor(message?: string) {

@@ -1,9 +1,9 @@
-import { Response, Request, NextFunction } from 'express';
+import { Response, Request } from 'express';
 import { logger } from '../util/logger';
 import { ExtendedError } from '../util';
 
 // Без next хандлер не будет работать
-export const errorHandler = (err: ExtendedError, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: ExtendedError, req: Request, res: Response) => {
 
     if (!err.statusCode) err.statusCode = 500;
     if (!err.response) err.response = err.message;

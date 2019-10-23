@@ -20,7 +20,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
                 res.json(user.toAuthJSON());
             }
 
-            return res.status(400).send(info);
+            return res.status(200).send(info);
         })(req, res, next);
     }
     catch (err) {
