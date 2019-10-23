@@ -1,12 +1,14 @@
-import { Response, Request } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import { logger } from '../util/logger';
 import { ExtendedError } from '../util';
 
 // Без next хандлер не будет работать
-export const errorHandler = (err: ExtendedError, req: Request, res: Response) => {
+export const errorHandler = (err: ExtendedError, req: Request, res: Response, next: NextFunction) => {
 
     if (!err.statusCode) err.statusCode = 500;
     if (!err.response) err.response = err.message;
+
+    console.log('kek');
 
     logger.log({
         level: 'error',
