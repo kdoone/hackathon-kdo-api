@@ -53,7 +53,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
                     param
                 };
             });
-            return res.status(200).json({ errors: cleaned });
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
         // Создаем id для рейтинга и user                
