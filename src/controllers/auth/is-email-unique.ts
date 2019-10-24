@@ -8,7 +8,7 @@ export const isEmailUnique = async (req: Request, res: Response, next: NextFunct
 
         if (!email) return isRequired('email', next);
 
-        const isExists = await User.isEmailExists(email.trim());
+        const isExists = await User.isEmailExists(email);
 
         res.status(200).json({
             isExists

@@ -1,13 +1,15 @@
 import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
 import { isRequired } from '../../util/is-required';
+import { ReqWithPayload } from '../../types/req-with-payload';
 
-export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { password, id } = req.body;
+
+        const { id } = req.payload;
+        const { password } = req.body;
 
         if (!password) return isRequired('password', next);
-        if (!id) return isRequired('id', next);
 
         // хэшируем пароль
         const user = new User();
