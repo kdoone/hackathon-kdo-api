@@ -5,7 +5,9 @@ import { isRequired } from '../../util/is-required';
 export const login = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
-        const { email, password } = req.body;
+        let { email, password } = req.body;
+        email = email.trim();
+        password = password.trim();
 
         if (!email) return isRequired('email', next);
         if (!password) return isRequired('password', next);

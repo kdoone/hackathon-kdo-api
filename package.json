@@ -53,6 +53,7 @@
         "pug": "^2.0.4",
         "request": "^2.88.0",
         "request-promise": "^4.2.4",
+        "trim-request": "^1.0.6",
         "uuid": "^3.3.3",
         "winston": "^3.2.1"
     },

@@ -6,7 +6,10 @@ import { alreadyExists } from '../../util';
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const { email, password, username } = req.body;
+        let { email, password, username } = req.body;
+        email = email.trim();
+        password = password.trim();
+        username = username.trim();
 
         if (!email) return isRequired('email', next);
         if (!password) return isRequired('password', next);
