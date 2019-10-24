@@ -1,7 +1,18 @@
 import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
-import { isRequired } from '../../util/is-required';
 import { ReqWithPayload } from '../../types/req-with-payload';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../util';
+
+export const changePasswordValidate = [
+    check('password')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'password is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'password is empty' })
+        .bail()
+        .isLength({ max: 16 }).withMessage({ statusCode: 3, message: 'shall not exceed 16 characters' })
+];
 
 export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
@@ -9,7 +20,12 @@ export const changePassword = async (req: ReqWithPayload, res: Response, next: N
         const { id } = req.payload;
         const { password } = req.body;
 
-        if (!password) return isRequired('password', next);
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
+        }
 
         // хэшируем пароль
         const user = new User();

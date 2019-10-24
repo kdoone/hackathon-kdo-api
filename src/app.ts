@@ -3,9 +3,8 @@ import cors from 'cors';
 import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
-import trimRequest from 'trim-request';
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate } from './controllers';
 import { checkUserAgent } from './util';
 // Create Express server
 const app = express();
@@ -37,7 +36,6 @@ app.use(urlencoded({ extended: true }));
 app.use(
     express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
 );
-app.use(trimRequest.all);
 
 // Passport config
 import './config/passport';
@@ -47,8 +45,8 @@ import './config/passport';
 // Auth
 app.post('/auth/register', auth.optional, registerValidate, checkUserAgent, register);
 app.post('/auth/login', auth.optional, loginValidate, checkUserAgent, login);
-app.post('/auth/reset-password', auth.optional, checkUserAgent, resetPassword);
-app.post('/auth/change-password', auth.required, changePassword);
+app.post('/auth/reset-password', auth.optional, resetPaswordValidate, checkUserAgent, resetPassword);
+app.post('/auth/change-password', auth.required, changePasswordValidate, changePassword);
 app.post('/auth/exists-username', auth.optional, isUsernameUnique);
 app.post('/auth/exists-email', auth.optional, isEmailUnique);
 // Rating

@@ -2,23 +2,37 @@ import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
 import { createTransport } from 'nodemailer';
 import generator from 'generate-password';
-import { isRequired } from '../../util/is-required';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../util';
+
+export const resetPaswordValidate = [
+    check('email')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'email is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'email is empty' })
+        .bail()
+        .isEmail().withMessage({ statusCode: 3, message: 'it is not email' })
+        .bail()
+        .custom(async value => {
+            const exists = await User.isEmailExists(value);
+            if (!exists) { return Promise.reject(); }
+        }).withMessage({ statusCode: 4, message: 'email doesnt exists' })
+        .bail()
+        .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
+];
 
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email } = req.body;
 
-        if (!email) return isRequired('email', next);
+        const errors = validationResult(req);
 
-        const isEmailExists = await User.isEmailExists(email);
-
-        if (!isEmailExists) {
-            return res.json({
-                status: 0,
-                message: 'Введенный email не существует'
-            });
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
-        // 
+
         const transporter = createTransport({
             host: 'smtp.yandex.ru',
             port: 465,
@@ -60,7 +74,7 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
         await createNewPassword();
 
         res.json({
-            status: 1,
+            status: 'accepted',
             message: 'Новый пароль отправлен на вашу почту'
         });
 

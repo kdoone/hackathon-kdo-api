@@ -2,9 +2,11 @@ import { Response, Request, NextFunction } from 'express';
 import passport from 'passport';
 import { check, validationResult } from 'express-validator';
 import { User } from '../../models';
+import { cleanUnnecessary } from '../../util';
 
 export const loginValidate = [
     check('email')
+        .trim()
         .exists().withMessage({ statusCode: 1, message: 'email is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'email is empty' })
@@ -19,6 +21,7 @@ export const loginValidate = [
         .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
 
     check('password')
+        .trim()
         .exists().withMessage({ statusCode: 6, message: 'password is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 7, message: 'password is empty' })
@@ -34,15 +37,15 @@ export const loginValidate = [
             }
         })
 ];
-
 export const login = async (req: Request, res: Response, next: NextFunction) => {
 
     try {
-
         // Валидация
         const errors = validationResult(req);
+
         if (!errors.isEmpty()) {
-            return res.status(200).json({ status: 'rejected', errors: errors.array() });
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
         passport.authenticate('local', { session: false }, (err, passportUser, info) => {

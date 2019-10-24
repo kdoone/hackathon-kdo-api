@@ -1,9 +1,11 @@
 import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
 import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../util';
 
 export const registerValidate = [
     check('email')
+        .trim()
         .exists().withMessage({ statusCode: 1, message: 'email is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'email is empty' })
@@ -18,6 +20,7 @@ export const registerValidate = [
         .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
 
     check('password')
+        .trim()
         .exists().withMessage({ statusCode: 6, message: 'password is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 7, message: 'password is empty' })
@@ -25,6 +28,7 @@ export const registerValidate = [
         .isLength({ max: 16 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' }),
 
     check('username')
+        .trim()
         .exists().withMessage({ statusCode: 9, message: 'username is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 10, message: 'username is empty' })
@@ -45,14 +49,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         // Валидация
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            const cleaned = errors.array().map(({ value, location, ...cleanedItem }: any) => {
-                const { msg: { statusCode, message }, param } = cleanedItem;
-                return {
-                    statusCode,
-                    message,
-                    param
-                };
-            });
+            const cleaned = cleanUnnecessary(errors.array());
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
