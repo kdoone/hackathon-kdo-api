@@ -1,18 +1,25 @@
 import { Response, Request, NextFunction } from 'express';
 import { User } from '../../models';
-import { isRequired } from '../../util/is-required';
+import { check, validationResult } from 'express-validator';
+
+export const isEmailUniqueValidate = [
+    check('email')
+        .trim()
+        .custom(async value => {
+            const exists = await User.exists({ email: value });
+            if (exists) { return Promise.reject(); }
+        })
+];
 
 export const isEmailUnique = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email } = req.body;
+        const errors = validationResult(req);
 
-        if (!email) return isRequired('email', next);
+        if (!errors.isEmpty()) {
+            return res.status(200).send(false);
+        }
 
-        const isExists = await User.isEmailExists(email);
-
-        res.status(200).json({
-            isExists
-        });
+        res.status(200).send(true);
     }
     catch (err) {
         next(err);

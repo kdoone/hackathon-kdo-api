@@ -19,7 +19,7 @@ export const resetPaswordValidate = [
             if (!exists) { return Promise.reject(); }
         }).withMessage({ statusCode: 4, message: 'email doesnt exists' })
         .bail()
-        .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
+        .isLength({ max: 64 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
 ];
 
 export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {

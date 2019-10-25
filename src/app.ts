@@ -4,7 +4,7 @@ import { connect } from 'mongoose';
 import compression from 'compression';  // compresses requests
 import path from 'path';
 // Controllers
-import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate } from './controllers';
+import { errorHandler, notFound, auth, register, login, resetPassword, changePassword, getLocalRating, changeLocalRating, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate } from './controllers';
 import { checkUserAgent } from './util';
 // Create Express server
 const app = express();
@@ -47,8 +47,8 @@ app.post('/auth/register', auth.optional, registerValidate, checkUserAgent, regi
 app.post('/auth/login', auth.optional, loginValidate, checkUserAgent, login);
 app.post('/auth/reset-password', auth.optional, resetPaswordValidate, checkUserAgent, resetPassword);
 app.post('/auth/change-password', auth.required, changePasswordValidate, changePassword);
-app.post('/auth/exists-username', auth.optional, isUsernameUnique);
-app.post('/auth/exists-email', auth.optional, isEmailUnique);
+app.post('/auth/exists-email', auth.optional, isEmailUniqueValidate, isEmailUnique);
+app.post('/auth/exists-username', auth.optional, isUsernameUniqueValidate, isUsernameUnique);
 // Rating
 app.get('/api/local-rating', auth.required, getLocalRating);
 app.post('/api/local-rating', auth.required, changeLocalRating);

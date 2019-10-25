@@ -26,7 +26,7 @@ export const changePasswordValidate = [
             }
         })
         .bail()
-        .isLength({ max: 16 }).withMessage({ statusCode: 5, message: 'shall not exceed 16 characters' }),
+        .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 16 characters' }),
 
     check('password')
         .trim()
@@ -34,7 +34,7 @@ export const changePasswordValidate = [
         .bail()
         .not().isEmpty().withMessage({ statusCode: 7, message: 'password is empty' })
         .bail()
-        .isLength({ max: 16 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
+        .isLength({ max: 32 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
 ];
 
 export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {

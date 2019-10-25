@@ -18,7 +18,7 @@ export const loginValidate = [
             if (!user) { return Promise.reject(); }
         }).withMessage({ statusCode: 4, message: 'Iccorrect email' })
         .bail()
-        .isLength({ max: 32 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
+        .isLength({ max: 64 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
 
     check('password')
         .trim()
@@ -26,7 +26,7 @@ export const loginValidate = [
         .bail()
         .not().isEmpty().withMessage({ statusCode: 7, message: 'password is empty' })
         .bail()
-        .isLength({ max: 16 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
+        .isLength({ max: 32 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
         .bail()
         .custom(async (value, { req }) => {
             const user = await User.findOne({ email: req.body.email });
