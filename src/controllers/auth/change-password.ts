@@ -5,13 +5,36 @@ import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../util';
 
 export const changePasswordValidate = [
+    check('previousPassword')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'previous password is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'previous password is empty' })
+        .bail()
+        .custom(async (value, { req }) => {
+            const user = await User.findById(req.payload.id);
+
+            if (!user) {
+                return Promise.reject({ statusCode: 3, message: 'user doesnt exists' });
+            }
+
+            if (!user.validatePassword(value)) {
+                return Promise.reject({
+                    statusCode: 4,
+                    message: 'is not equal to previous password'
+                });
+            }
+        })
+        .bail()
+        .isLength({ max: 16 }).withMessage({ statusCode: 5, message: 'shall not exceed 16 characters' }),
+
     check('password')
         .trim()
-        .exists().withMessage({ statusCode: 1, message: 'password is required' })
+        .exists().withMessage({ statusCode: 6, message: 'password is required' })
         .bail()
-        .not().isEmpty().withMessage({ statusCode: 2, message: 'password is empty' })
+        .not().isEmpty().withMessage({ statusCode: 7, message: 'password is empty' })
         .bail()
-        .isLength({ max: 16 }).withMessage({ statusCode: 3, message: 'shall not exceed 16 characters' })
+        .isLength({ max: 16 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
 ];
 
 export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
