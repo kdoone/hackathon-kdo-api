@@ -35,6 +35,7 @@ export const changePassword = async (req: ReqWithPayload, res: Response, next: N
             if (err) next(err);
 
             res.json({
+                status: 'accepted',
                 message: 'Passsword changed successfully',
                 email: user.email
             });
