@@ -10,7 +10,6 @@ export interface UserDocument extends Document {
     hash: string;
     user: any;
     uid: string;
-    test: any;
     username: string;
     generateJWT: () => string;
     toAuthJSON: () => AuthJson;
@@ -18,7 +17,8 @@ export interface UserDocument extends Document {
     validatePassword: (password: string) => any;
     setUid: () => void;
     friends: any;
-    record: any;
+    records: any;
+    token: string;
 }
 
 export interface UserModel extends Model<UserDocument> {
@@ -37,7 +37,11 @@ export const UserSchema = new Schema({
     salt: String,
     uid: String,
     friends: [{ type: ObjectId, ref: 'Friend' }],
-    records: [{ type: ObjectId, ref: 'Rating' }]
+    records: { type: ObjectId, ref: 'Rating' },
+    token: {
+        type: String,
+        default: ''
+    }
 }, { timestamps: true });
 
 UserSchema.methods.setPassword = function (this: UserDocument, password: string): void {
@@ -70,16 +74,15 @@ UserSchema.statics.getId = async function (key: string, value: any): Promise<any
     return this.findOne({ [key]: value });
 };
 
-UserSchema.methods.generateJWT = function (this: UserDocument): string {
-    const today: Date = new Date();
-    const expirationDate: Date = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
-
-    return jwt.sign({
+UserSchema.methods.generateJWT = async function (this: UserDocument): Promise<string> {
+    const token = jwt.sign({
         email: this.email,
-        id: this._id,
-        exp: expirationDate.getTime() / 1000
+        id: this._id
     }, 'secret');
+
+    await this.updateOne({ token });
+
+    return token;
 };
 
 interface AuthJson {
@@ -92,21 +95,16 @@ interface AuthJson {
     username: string;
 }
 
-UserSchema.methods.toAuthJSON = function (this: UserDocument): AuthJson {
+UserSchema.methods.toAuthJSON = async function (this: UserDocument): Promise<AuthJson> {
+    const token = await this.generateJWT();
+
     return {
         status: 'accepted',
         statusCode: 0,
         _id: this._id,
         email: this.email,
         username: this.username,
-        token: this.generateJWT(),
+        token,
         uid: this.uid
     };
 };
-
-UserSchema.virtual('ownRating', {
-    ref: 'Rating',
-    localField: '_id',
-    foreignField: 'publicId',
-    justOne: true
-});

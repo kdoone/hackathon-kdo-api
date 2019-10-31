@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { User } from '../../models';
 import { ReqWithPayload } from '../../types/req-with-payload';
 import { check, validationResult } from 'express-validator';
@@ -12,7 +12,7 @@ export const changePasswordValidate = [
         .not().isEmpty().withMessage({ statusCode: 2, message: 'previous password is empty' })
         .bail()
         .custom(async (value, { req }) => {
-            const user = await User.findById(req.payload.id);
+            const user = await User.findById(req.user.id);
 
             if (!user) {
                 return Promise.reject({ statusCode: 3, message: 'user doesnt exists' });
@@ -40,7 +40,7 @@ export const changePasswordValidate = [
 export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
 
-        const { id } = req.payload;
+        const { id, email } = req.user;
         const { password } = req.body;
 
         const errors = validationResult(req);
@@ -51,8 +51,9 @@ export const changePassword = async (req: ReqWithPayload, res: Response, next: N
         }
 
         // хэшируем пароль
-        const user = new User();
+        const user = new User({ _id: id, email });
         user.setPassword(password);
+        const token = await user.generateJWT();
         // обновляем пароль
         User.findByIdAndUpdate(id, { hash: user.hash, salt: user.salt }, (err, user) => {
             if (err) next(err);
@@ -60,7 +61,8 @@ export const changePassword = async (req: ReqWithPayload, res: Response, next: N
             res.json({
                 status: 'accepted',
                 message: 'Passsword changed successfully',
-                email: user.email
+                email: user.email,
+                token
             });
         });
     }

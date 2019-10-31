@@ -3,12 +3,44 @@ const { ObjectId } = Schema.Types;
 
 export interface RatingDocument extends Document {
     game: string;
-    record: number;
-    user: any;
+    user: string;
+    shulteTable: number;
+    rememberNumber: number;
+    findNumber: number;
+    calculation: number;
+    equation: number;
+    shulteLetters: number;
+    rememberWords: number;
 }
 
 export const RatingSchema = new Schema({
-    game: String,
-    record: Number,
-    user: { type: ObjectId, ref: 'User' }
+    user: { type: ObjectId, ref: 'User' },
+    shulteTable: {
+        type: Number,
+        default: 0
+    },
+    rememberNumber: {
+        type: Number,
+        default: 0
+    },
+    findNumber: {
+        type: Number,
+        default: 0
+    },
+    calculation: {
+        type: Number,
+        default: 0
+    },
+    equation: {
+        type: Number,
+        default: 0
+    },
+    shulteLetters: {
+        type: Number,
+        default: 0
+    },
+    rememberWords: {
+        type: Number,
+        default: 0
+    }
 });

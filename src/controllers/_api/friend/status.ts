@@ -4,7 +4,7 @@ import { Friend } from '../../../models';
 
 export const getStatuses = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { id: myUserId } = req.payload;
+        const { id: myUserId } = req.user;
 
         const findAllStatuses = await Friend.find().populate('recipient requester')
             .or([

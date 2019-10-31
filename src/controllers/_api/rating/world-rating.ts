@@ -1,81 +1,53 @@
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../../../models';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../../util';
+
+export const getWorldRatingValidate = [
+    check('game')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'game is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
+];
 
 export const getWorldRating = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const arr = await User.aggregate([
-            { '$unwind': '$records' },
+        const { game: gameName } = req.body;
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
+        }
+
+        const arrTotal = await User.aggregate([
             {
-                '$lookup': {
+                $lookup: {
                     from: 'ratings',
                     localField: 'records',
                     foreignField: '_id',
-                    as: 'record_objects'
+                    as: 'records'
                 }
             },
-            { '$unwind': '$record_objects' },
+            { $unwind: '$records' },
             {
-                '$group': {
-                    '_id': '$_id',
-                    'records': { '$push': '$record_objects' },
-                    'username': { '$first': '$username' },
-                    'email': { '$first': '$email' },
+                $group: {
+                    _id: '$_id',
+                    game: { $first: gameName },
+                    record: { $first: `$records.${gameName}` },
+                    username: { $first: '$username' }
                 }
-            }
+            },
+            { $sort: { record: -1 } }
         ]);
 
-        const arrCopy: any = arr.slice();
-
-        interface Records {
-            _id: string;
-            game: string;
-            // user is object id
-            user: string;
-            record: number;
-        }
-
-        interface ItemOfArrTotal {
-            records: Records[];
-            username: string;
-            email: string;
-        }
-
-        interface ArrToTotal {
-            _id?: string;
-            username: string;
-            email: string;
-            totalRecord: number;
-        }
-
-        const arrToTotal = arrCopy.map((item: ItemOfArrTotal): ArrToTotal => {
-            // Документ в объект                        
-            // Убираем records
-            const { records, ...withoutRecords } = item;
-
-            if (!records.length) {
-                return {
-                    ...withoutRecords,
-                    totalRecord: 0
-                };
-            }
-
-            // Нужно превратить records в один рекорд сложив все значения
-            const totalRecord: any = records.reduce((prev: number, cur: any) => {
-                const { record: curRecord = 0 } = cur;
-
-                return prev + curRecord;
-            }, 0);
-
-            return {
-                ...withoutRecords,
-                totalRecord
-            };
+        res.json({
+            status: 'accepted',
+            records: arrTotal
         });
-        // Сортируем по totalRecord
-        const arrSorted = arrToTotal.sort((a: any, b: any) => a.totalRecord < b.totalRecord);
-
-        res.json(arrSorted);
     }
     catch (err) {
         next(err);

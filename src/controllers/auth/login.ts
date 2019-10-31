@@ -48,14 +48,13 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        passport.authenticate('local', { session: false }, (err, passportUser, info) => {
+        passport.authenticate('local', { session: false }, async (err, passportUser, info) => {
             if (err) return next(err);
 
             if (passportUser) {
                 const user = passportUser;
-                user.token = passportUser.generateJWT();
 
-                res.json(user.toAuthJSON());
+                return res.json(await user.toAuthJSON());
             }
 
             return res.status(200).send(info);

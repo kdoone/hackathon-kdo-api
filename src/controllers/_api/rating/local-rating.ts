@@ -6,7 +6,7 @@ import { ReqWithPayload } from '../../../types/req-with-payload';
 export const getLocalRating = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         // id юзера смотрит по токену
-        const { id } = req.payload;
+        const { id } = req.user;
 
         Rating.findOne({ publicId: id }, 'record', (err, rating) => {
             if (err) next(err);
@@ -23,7 +23,7 @@ export const getLocalRating = async (req: ReqWithPayload, res: Response, next: N
 export const changeLocalRating = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { record } = req.body;
-        const { id } = req.payload;
+        const { id } = req.user;
 
         if (!record) return isRequired('record', next);
 

@@ -1,11 +1,19 @@
 import { Response, NextFunction } from 'express';
-import { Rating, User } from '../../../models';
+import { User } from '../../../models';
 import { ReqWithPayload } from '../../../types/req-with-payload';
+import { validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../../util';
 
 export const getFriendRating = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
-
     try {
-        const { id: myUserId } = req.payload;
+        const { id: myUserId } = req.user;
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
+        }
 
         const getAllFriends: any = await User.findById(myUserId, 'friends')
             .populate({

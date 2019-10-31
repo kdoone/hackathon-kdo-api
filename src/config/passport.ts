@@ -1,8 +1,10 @@
 import passport from 'passport';
-import { Strategy as LocalStategy } from 'passport-local';
+import { Strategy as LocalStrategy } from 'passport-local';
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
+
 import { User } from '../models';
 
-passport.use(new LocalStategy({
+passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     session: false
@@ -27,5 +29,22 @@ passport.use(new LocalStategy({
         }
 
         return done(null, user);
+    });
+}));
+
+const jwtOpt = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'secret'
+};
+
+passport.use(new JWTStrategy(jwtOpt, (jwtPayload, done) => {
+    User.findById(jwtPayload.id, (err, user) => {
+        if (err) return done(err);
+
+        if (user) {
+            return done(null, user);
+        }
+
+        return done(null, false);
     });
 }));

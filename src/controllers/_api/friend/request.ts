@@ -9,7 +9,7 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
         const { username } = req.body;
         if (!username) return isRequired('username', next);
 
-        const { id: myUserId } = req.payload;
+        const { id: myUserId } = req.user;
         const { _id: requestedUserId } = await User.getId('username', username);
 
         // Проверяем чтобы юзер не отправил запрос себе

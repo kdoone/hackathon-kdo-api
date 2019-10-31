@@ -47,20 +47,22 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
             try {
                 // Рандомлю пароль
                 const password = generator.generate({
-                    length: 10,
-                    numbers: true
+                    length: 5,
+                    numbers: true,
+                    uppercase: false
                 });
                 // Создаю ссылки на экземлпяр чтобы не мутировать основной класс
                 const user = new User();
                 user.setPassword(password);
 
-                await User.findOneAndUpdate({ email }, { hash: user.hash, salt: user.salt });
+                await User.findOneAndUpdate({ email }, { hash: user.hash, salt: user.salt, token: 'deleted' });
 
                 await transporter.sendMail({
                     from: '"Boom Brains" <kazdevops@yandex.kz>',
                     to: `${email}, ${email}`,
                     subject: 'Password recovery',
                     html: `
+                        <p> Your new password </p>
                         <p> Email: ${email} </p>
                         <p> New password: ${password} </p>
                     `

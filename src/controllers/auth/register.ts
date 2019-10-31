@@ -1,7 +1,8 @@
 import { Response, Request, NextFunction } from 'express';
-import { User } from '../../models';
+import { User, Rating } from '../../models';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../util';
+import { Types } from 'mongoose';
 
 export const registerValidate = [
     check('email')
@@ -44,7 +45,7 @@ export const registerValidate = [
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const { email, password, username } = req.body;
+        const { email, password, username, localRecords = {} } = req.body;
 
         // Валидация
         const errors = validationResult(req);
@@ -53,17 +54,25 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
+        // object id для двух полей
+        const generateUserId = Types.ObjectId();
+
+        // Создаем рейтинг и привязываем его к клиенту
+        const rating = await Rating.create({ user: generateUserId, ...localRecords });
+
         // Создаем id для рейтинга и user                
         const finalUser = new User({
+            _id: generateUserId,
             email,
             username,
+            records: rating._id
         });
 
         finalUser.setPassword(password);
         finalUser.setUid();
         await finalUser.save();
 
-        res.json(finalUser.toAuthJSON());
+        res.json(await finalUser.toAuthJSON());
     }
 
     catch (err) {
