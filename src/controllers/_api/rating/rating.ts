@@ -42,7 +42,8 @@ export const getRating = async (req: ReqWithPayload, res: Response, next: NextFu
         // выбираем gamename и деструктурируем объект выбрав только одно
         const { [gameName]: record }: any = await Rating.findOne({ user: myUserId }, gameName);
 
-        res.json({ status: 'accepted', record });
+        res.json({ status: 'accepted', record, game: gameName });
+
     }
     catch (err) {
         next(err);

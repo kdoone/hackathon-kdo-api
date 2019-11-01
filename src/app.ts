@@ -5,9 +5,10 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { errorHandler, notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate } from './controllers';
 import { checkUserAgent } from './util';
-import { checkToken } from './middlewares';
+import { checkToken, errorHandler } from './middlewares';
+
 // Create Express server
 const app = express();
 
@@ -67,6 +68,7 @@ app.get('/api/friend-record', auth.required, getFriendRating);
 app.post('/api/get-record', auth.required, getRatingValidate, getRating);
 app.post('/api/record', auth.required, createRatingValidate, createRating);
 app.get('/api/games-list', auth.required, getList);
+app.post('/api/game-info', auth.required, gameInfoValidate, gameInfo);
 // Friend
 app.post('/api/friend-request', auth.required, friendRequest);
 app.post('/api/friend-accept', auth.required, friendAccept);
@@ -76,6 +78,5 @@ app.get('/api/status-incoming', auth.required, getStatusesIncoming);
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);
-
 
 export default app;
