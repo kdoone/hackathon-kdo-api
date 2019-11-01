@@ -42,5 +42,17 @@ export const RatingSchema = new Schema({
     rememberWords: {
         type: Number,
         default: 0
+    },
+    memorySquare: {
+        type: Number,
+        default: 0
+    },
+    coloredFigures: {
+        type: Number,
+        default: 0
+    },
+    coloredWords: {
+        type: Number,
+        default: 0
     }
 });
