@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler } from './middlewares';
 
@@ -62,13 +62,14 @@ app.post('/auth/exists-username', isUsernameUniqueValidate, isUsernameUnique);
 app.get('/auth/user-info', auth.required, userInfo);
 app.get('/auth/logout', auth.required, logout);
 app.get('/auth/verify-token', verifyToken);
-// Rating
+// Records
 app.post('/api/world-record', auth.required, getWorldRatingValidate, getWorldRating);
 app.get('/api/friend-record', auth.required, getFriendRating);
 app.post('/api/get-record', auth.required, getRatingValidate, getRating);
 app.post('/api/record', auth.required, createRatingValidate, createRating);
 app.get('/api/games-list', auth.required, getList);
 app.post('/api/game-info', auth.required, gameInfoValidate, gameInfo);
+app.post('/api/update-record', auth.required, updateRecord);
 // Friend
 app.post('/api/friend-request', auth.required, friendRequest);
 app.post('/api/friend-accept', auth.required, friendAccept);
