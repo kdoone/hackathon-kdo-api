@@ -16,7 +16,7 @@ export const loginValidate = [
         .custom(async value => {
             const user = await User.findOne({ email: value });
             if (!user) { return Promise.reject(); }
-        }).withMessage({ statusCode: 4, message: 'Iccorrect email' })
+        }).withMessage({ statusCode: 4, message: 'Incorrect email', ru: 'Некорректный email' })
         .bail()
         .isLength({ max: 64 }).withMessage({ statusCode: 5, message: 'shall not exceed 32 characters' }),
 
@@ -33,7 +33,7 @@ export const loginValidate = [
             if (!user) { return Promise.reject({ statusCode: 9, message: 'Cannot validate due to email' }); }
 
             if (!user.validatePassword(value)) {
-                return Promise.reject({ statusCode: 10, message: 'Incorrect password' });
+                return Promise.reject({ statusCode: 10, message: 'Incorrect password', ru: 'Некорректный пароль' });
             }
         })
 ];
