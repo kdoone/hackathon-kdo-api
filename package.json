@@ -16,6 +16,8 @@
         "build-ts": "tsc",
         "watch-ts": "tsc -w",
         "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+        "migrate": "cd migrations/mongo && migrate-mongo",
+        "restore": "mongorestore -d boom-brains --drop dumps/boom-brains/",
         "copy-static-assets": "rm -rf dist/public && ts-node copyStaticAssets.ts",
         "debug": "npm run build && npm run watch-debug",
         "serve-debug": "nodemon --inspect dist/server.js"

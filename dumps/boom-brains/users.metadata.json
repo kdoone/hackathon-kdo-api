@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"boom-brains.users"},{"v":2,"key":{"email":1},"name":"email_1","ns":"boom-brains.users","background":true}],"uuid":"b367603e3ad044c194d5ea1012a323c3"}
