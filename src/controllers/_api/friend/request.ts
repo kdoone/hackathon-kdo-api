@@ -1,12 +1,14 @@
 import { Response, NextFunction } from 'express';
 import { ReqWithPayload } from '../../../types/req-with-payload';
 import { User, Friend } from '../../../models';
-import { alreadyExists } from '../../../util';
-import { check } from 'express-validator';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../../util';
 
 export const friendRequestValidate = [
-    check('username')
+    check('searchText')
         .trim()
+        .exists().withMessage({ statusCode: 1, message: 'email is required' })
+        .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
         .bail()
         .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 32 characters' })
@@ -15,36 +17,36 @@ export const friendRequestValidate = [
 export const friendRequest = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
-        const { uid, username } = req.body;
+        const { searchText } = req.body;
 
-        if (username) {
-            check('username')
-                .trim()
-                .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
-                .bail()
-                .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 32 characters' });
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-
+        const uid = await User.getId('uid', searchText);
+        const username = await User.getId('username', searchText);
 
         let requestedUserId: string;
 
-        if (username) {
-            const { _id } = await User.getId('username', username);
-            requestedUserId = _id;
+        if (uid) {
+            requestedUserId = uid._id;
+        } else if (username) {
+            requestedUserId = username._id;
         } else {
-            const { _id } = await User.getId('uid', uid);
-            requestedUserId = _id;
+            return res.status(200).json({ statusCode: 4, message: 'this user doesnt exists' });
         }
 
         // Проверка чтобы не отправил запрос самому себе
         if (myUserId === requestedUserId) {
-            return res.status(500).send('Cant request own username');
+            return res.status(200).json({ statusCode: 5, message: 'cant request myself' });
         }
 
         // Проверяем, существует ли такой запрос
         const isRequestExists = await Friend.isRequestExists(myUserId, requestedUserId);
-        if (isRequestExists) return alreadyExists('request', next);
+        if (isRequestExists) return res.status(200).json({ statusCode: 6, message: 'request where i am requester exists' });
 
         const docA = await Friend.findOneAndUpdate(
             { requester: myUserId, recipient: requestedUserId },
@@ -68,7 +70,7 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
             { $push: { friends: docB._id } }
         );
 
-        res.send('request was successfull');
+        res.send({ status: 'accepted', message: 'request was successfull' });
 
     }
     catch (err) {

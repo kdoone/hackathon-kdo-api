@@ -58,7 +58,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         const generateUserId = Types.ObjectId();
 
         // Создаем рейтинг и привязываем его к клиенту
-        const rating = await Rating.create({ user: generateUserId, ...localRecords });
+        const rating = await Rating.create({ user: generateUserId, email, ...localRecords });
 
         // Создаем id для рейтинга и user                
         const finalUser = new User({

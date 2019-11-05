@@ -4,6 +4,7 @@ const { ObjectId } = Schema.Types;
 export interface RatingDocument extends Document {
     game: string;
     user: string;
+    email: string;
     shulteTable: number;
     rememberNumber: number;
     findNumber: number;
@@ -15,6 +16,7 @@ export interface RatingDocument extends Document {
 
 export const RatingSchema = new Schema({
     user: { type: ObjectId, ref: 'User' },
+    email: String,
     shulteTable: {
         type: Number,
         default: 0

@@ -10,6 +10,7 @@ export interface FriendDocument extends Document {
 
 export interface FriendModel extends Model<FriendDocument> {
     isRequestExists: (myUserId: string, requestedUserId: string) => Promise<any>;
+    isRejectExists: (myUserId: string, requestedUserId: string) => Promise<any>;
 }
 
 export const FriendSchema = new Schema({
@@ -28,4 +29,8 @@ export const FriendSchema = new Schema({
 
 FriendSchema.statics.isRequestExists = async function (myUserId: string, requestedUserId: string): Promise<any> {
     return this.exists({ requester: myUserId, recipient: requestedUserId });
+};
+
+FriendSchema.statics.isRejectExists = async function (myUserId: string, requestedUserId: string): Promise<any> {
+    return this.exists({ requester: requestedUserId, recipient: myUserId });
 }; 

@@ -1,21 +1,39 @@
 import { Response, NextFunction } from 'express';
 import { ReqWithPayload } from '../../../types/req-with-payload';
 import { Friend, User } from '../../../models';
-import { isRequired } from '../../../util/is-required';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../../util';
+
+export const friendAcceptValidate = [
+    check('uid')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'uid is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'uid is empty' })
+        .bail()
+        .custom(async (value) => {
+            const exists = await User.findOne({ uid: value });
+            if (!exists) { return Promise.reject({ statusCode: 3, message: 'user doesnt exists' }); }
+        })
+];
 
 export const friendAccept = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { username } = req.body;
-        if (!username) return isRequired('username', next);
-
+        const { uid } = req.body;
         const { id: myUserId } = req.user;
-        const { _id: requestedUserId } = await User.getId('username', username);
 
-        // Проверяем чтобы юзер не отправил запрос себе
-        const { username: myUsername } = await User.findById(myUserId, 'username');
+        const errors = validationResult(req);
 
-        if (myUsername === username) {
-            return res.status(500).send('Cant accept own username');
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
+        }
+
+        const { _id: requestedUserId } = await User.getId('uid', uid);
+
+        // Проверяем чтобы юзер не отправил запрос себе const { uid: myUsername } = await User.findById(myUserId, 'uid');
+        if (myUserId === requestedUserId) {
+            return res.status(200).json({ statusCode: 4, message: 'cant request myself' });
         }
 
         await Friend.findOneAndUpdate(
@@ -28,7 +46,7 @@ export const friendAccept = async (req: ReqWithPayload, res: Response, next: Nex
             { $set: { status: 3 } }
         );
 
-        res.send('accepted');
+        res.json({ status: 'accepted', message: 'request was accepted' });
     }
     catch (err) {
         next(err);
