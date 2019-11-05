@@ -1,5 +1,6 @@
 export * from './auth';
 export * from './change-password';
+export * from './change-username';
 export * from './delete-user';
 export * from './is-email-unique';
 export * from './is-username-unique';
