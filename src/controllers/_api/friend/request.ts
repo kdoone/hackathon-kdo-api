@@ -1,21 +1,44 @@
 import { Response, NextFunction } from 'express';
 import { ReqWithPayload } from '../../../types/req-with-payload';
 import { User, Friend } from '../../../models';
-import { isRequired } from '../../../util/is-required';
 import { alreadyExists } from '../../../util';
+import { check } from 'express-validator';
+
+export const friendRequestValidate = [
+    check('username')
+        .trim()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
+        .bail()
+        .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 32 characters' })
+];
 
 export const friendRequest = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { username } = req.body;
-        if (!username) return isRequired('username', next);
-
         const { id: myUserId } = req.user;
-        const { _id: requestedUserId } = await User.getId('username', username);
+        const { uid, username } = req.body;
 
-        // Проверяем чтобы юзер не отправил запрос себе
-        const { username: myUsername } = await User.findById(myUserId, 'username');
+        if (username) {
+            check('username')
+                .trim()
+                .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
+                .bail()
+                .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 32 characters' });
+        }
 
-        if (myUsername === username) {
+
+
+        let requestedUserId: string;
+
+        if (username) {
+            const { _id } = await User.getId('username', username);
+            requestedUserId = _id;
+        } else {
+            const { _id } = await User.getId('uid', uid);
+            requestedUserId = _id;
+        }
+
+        // Проверка чтобы не отправил запрос самому себе
+        if (myUserId === requestedUserId) {
             return res.status(500).send('Cant request own username');
         }
 

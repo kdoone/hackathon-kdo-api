@@ -53,8 +53,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
             if (passportUser) {
                 const user = passportUser;
+                const result = await user.toAuthJSON();
 
-                return res.json(await user.toAuthJSON());
+                return res.json(result);
             }
 
             return res.status(200).send(info);

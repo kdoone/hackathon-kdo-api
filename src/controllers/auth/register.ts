@@ -39,7 +39,7 @@ export const registerValidate = [
             if (exists) { return Promise.reject(); }
         }).withMessage({ statusCode: 11, message: 'username is already on use' })
         .bail()
-        .isLength({ max: 16 }).withMessage({ statusCode: 12, message: 'shall not exceed 16 characters' })
+        .isLength({ max: 32 }).withMessage({ statusCode: 12, message: 'shall not exceed 16 characters' })
 ];
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
@@ -72,7 +72,8 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
         finalUser.setUid();
         await finalUser.save();
 
-        res.json(await finalUser.toAuthJSON());
+        const result = await finalUser.toAuthJSON();
+        res.json(result);
     }
 
     catch (err) {

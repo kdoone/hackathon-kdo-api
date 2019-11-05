@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername, changeUsernameValidate } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler } from './middlewares';
 
@@ -63,7 +63,7 @@ app.get('/auth/user-info', auth.required, userInfo);
 app.get('/auth/logout', auth.required, logout);
 app.get('/auth/verify-token', verifyToken);
 app.post('/auth/delete-user', deleteUser);
-app.post('/auth/username', auth.required, changeUsername);
+app.post('/auth/username', auth.required, changeUsernameValidate, changeUsername);
 // Records
 app.post('/api/world-record', auth.required, getWorldRatingValidate, getWorldRating);
 app.get('/api/friend-record', auth.required, getFriendRating);

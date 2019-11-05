@@ -11,7 +11,7 @@ export const changeUsernameValidate = [
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'username is empty' })
         .bail()
-        .isLength({ max: 64 }).withMessage({ statusCode: 3, message: 'username shall not exceed 64 characters' })
+        .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 64 characters' })
 ];
 
 export const changeUsername = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
@@ -29,6 +29,7 @@ export const changeUsername = async (req: ReqWithPayload, res: Response, next: N
         await User.findByIdAndUpdate(myUserId, { username });
 
         res.json({ status: 'acccepted', message: 'username changed' });
+
     }
     catch (err) {
         next(err);
