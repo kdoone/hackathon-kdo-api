@@ -9,7 +9,7 @@ export const getList = async (req: ReqWithPayload, res: Response, next: NextFunc
         const recordsDoc: any = await User.findById(myUserId)
             .populate({
                 path: 'records',
-                select: '-_id -__v -user'
+                select: '-_id -__v -user -email'
             });
 
         const { records } = recordsDoc.toObject();

@@ -5,9 +5,9 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, getWorldRating, friendRequest, friendReject, friendAccept, getFriendRating, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getWorldRatingValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, getFriendRatingValidate } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, separateWorldRecord, friendRequest, friendReject, friendAccept, separateFriendRecord, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, separateWorldRecordValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, separateFriendRecordValidate, totalWorldRecord, totalFriendRecord, gameInfoTotal } from './controllers';
 import { checkUserAgent } from './util';
-import { checkToken, errorHandler } from './middlewares';
+import { checkToken, errorHandler, separateFriendRecordMiddleware, separateWorldRecordMiddleware, separateWorldRecordMiddlewareValidate, totalFriendRecordMiddleware, totalWorldRecordMiddleware } from './middlewares';
 
 // Create Express server
 const app = express();
@@ -65,13 +65,17 @@ app.get('/auth/verify-token', verifyToken);
 app.post('/auth/delete-user', deleteUser);
 app.post('/auth/username', auth.required, changeUsernameValidate, changeUsername);
 // Records
-app.post('/api/world-record', auth.required, getWorldRatingValidate, getWorldRating);
-app.post('/api/friend-record', auth.required, getFriendRatingValidate, getFriendRating);
+app.post('/api/world-record', auth.required, separateWorldRecordValidate, separateWorldRecord);
+app.post('/api/friend-record', auth.required, separateFriendRecordValidate, separateFriendRecord);
+app.get('/api/world-record', auth.required, totalWorldRecord);
+app.get('/api/friend-record', auth.required, totalFriendRecord);
 app.post('/api/get-record', auth.required, getRatingValidate, getRating);
 app.post('/api/record', auth.required, createRatingValidate, createRating);
 app.get('/api/games-list', auth.required, getList);
-app.post('/api/game-info', auth.required, gameInfoValidate, gameInfo);
+app.post('/api/game-info', auth.required, separateWorldRecordMiddlewareValidate, separateWorldRecordMiddleware, separateFriendRecordMiddleware, gameInfo);
+app.get('/api/game-info', auth.required, totalFriendRecordMiddleware, totalWorldRecordMiddleware, gameInfoTotal);
 app.post('/api/update-record', auth.required, updateRecord);
+
 // Friend
 app.post('/api/request', auth.required, friendRequestValidate, friendRequest);
 app.post('/api/accept', auth.required, friendAcceptValidate, friendAccept);

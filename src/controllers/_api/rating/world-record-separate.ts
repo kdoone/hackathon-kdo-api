@@ -3,7 +3,7 @@ import { User } from '../../../models';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
 
-export const getWorldRatingValidate = [
+export const separateWorldRecordValidate = [
     check('game')
         .trim()
         .exists().withMessage({ statusCode: 1, message: 'game is required' })
@@ -11,7 +11,7 @@ export const getWorldRatingValidate = [
         .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
 ];
 
-export const getWorldRating = async (req: Request, res: Response, next: NextFunction) => {
+export const separateWorldRecord = async (req: Request, res: Response, next: NextFunction) => {
     try {
 
         const { game: gameName } = req.body;

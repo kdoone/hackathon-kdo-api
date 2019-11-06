@@ -6,14 +6,14 @@ import { cleanUnnecessary } from '../../../util';
 import { Types } from 'mongoose';
 
 const { ObjectId } = Types;
-export const getFriendRatingValidate = [
+export const separateFriendRecordValidate = [
     check('game')
         .trim()
         .exists().withMessage({ statusCode: 1, message: 'game is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
 ];
-export const getFriendRating = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const separateFriendRecord = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
 
@@ -81,7 +81,10 @@ export const getFriendRating = async (req: ReqWithPayload, res: Response, next: 
             { $sort: { record: -1 } }
         ]);
 
-        res.json(aggregated);
+        res.json({
+            status: 'accepted',
+            records: aggregated
+        });
 
     }
     catch (err) {
