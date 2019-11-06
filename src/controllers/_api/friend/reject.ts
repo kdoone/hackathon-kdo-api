@@ -5,21 +5,21 @@ import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
 
 export const friendRejectValidate = [
-    check('uid')
+    check('id')
         .trim()
-        .exists().withMessage({ statusCode: 1, message: 'uid is required' })
+        .exists().withMessage({ statusCode: 1, message: 'id is required' })
         .bail()
-        .not().isEmpty().withMessage({ statusCode: 2, message: 'uid is empty' })
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'id is empty' })
         .bail()
         .custom(async (value) => {
-            const exists = await User.findOne({ uid: value });
+            const exists = await User.findById(value);
             if (!exists) { return Promise.reject({ statusCode: 3, message: 'user doesnt exists' }); }
         })
 ];
 
 export const friendReject = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { uid } = req.body;
+        const { id: requestedUserId } = req.body;
         const { id: myUserId } = req.user;
 
         const errors = validationResult(req);
@@ -28,8 +28,6 @@ export const friendReject = async (req: ReqWithPayload, res: Response, next: Nex
             const cleaned = cleanUnnecessary(errors.array());
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
-
-        const { _id: requestedUserId } = await User.findOne({ uid });
 
         // Проверяем чтобы юзер не отправил запрос себе        
         if (myUserId === requestedUserId) {

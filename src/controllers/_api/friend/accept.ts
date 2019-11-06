@@ -5,21 +5,21 @@ import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
 
 export const friendAcceptValidate = [
-    check('uid')
+    check('id')
         .trim()
-        .exists().withMessage({ statusCode: 1, message: 'uid is required' })
+        .exists().withMessage({ statusCode: 1, message: 'id is required' })
         .bail()
-        .not().isEmpty().withMessage({ statusCode: 2, message: 'uid is empty' })
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'id is empty' })
         .bail()
         .custom(async (value) => {
-            const exists = await User.findOne({ uid: value });
+            const exists = await User.findById(value);
             if (!exists) { return Promise.reject({ statusCode: 3, message: 'user doesnt exists' }); }
         })
 ];
 
 export const friendAccept = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
-        const { uid } = req.body;
+        const { id: requestedUserId } = req.body;
         const { id: myUserId } = req.user;
 
         const errors = validationResult(req);
@@ -29,11 +29,9 @@ export const friendAccept = async (req: ReqWithPayload, res: Response, next: Nex
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { _id: requestedUserId } = await User.getId('uid', uid);
-
         // Проверяем чтобы юзер не отправил запрос себе const { uid: myUsername } = await User.findById(myUserId, 'uid');
         if (myUserId === requestedUserId) {
-            return res.status(200).json({ statusCode: 4, message: 'cant request myself' });
+            return res.status(200).json({ statusCode: 4, message: 'cant accept myself' });
         }
 
         await Friend.findOneAndUpdate(
