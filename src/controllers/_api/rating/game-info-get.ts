@@ -7,8 +7,8 @@ export const gameInfoTotal = async (req: any, res: Response, next: NextFunction)
             worldRecords: req.worldRecords,
             myWorldRecord: req.myWorldRecord,
             friendRecords: req.friendRecords,
-            myFriendRecord: req.myFriendRecord
-
+            myFriendRecord: req.myFriendRecord,
+            achievements: req.achievements
         });
 
     }

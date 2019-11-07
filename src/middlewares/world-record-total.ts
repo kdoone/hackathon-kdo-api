@@ -26,7 +26,6 @@ export const totalWorldRecordMiddleware = async (req: any, res: Response, next: 
             { $project: { 'records._id': 0, 'records.user': 0, 'records.email': 0, 'records.__v': 0 } },
         ]);
 
-
         const worldRecords = arrTotal.map(({ username, records }: any) => {
             const arr = Object.keys(records);
             const totalRecord = arr.reduce((prev: any, cur: any) => {
