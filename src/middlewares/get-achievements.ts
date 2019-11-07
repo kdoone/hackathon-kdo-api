@@ -7,22 +7,24 @@ export const getAchievementsMiddleware = async (req: any, res: Response, next: N
 
         const { records } = await User.findById(myUserId);
 
-        let achievements = {
-            fastHand: false,
-            attentiveness: false,
-            goodMemory: false
-        };
+        let achievements = [];
 
         if (records.shulteTable >= 15000) {
-            achievements.fastHand = true;
+            achievements.push({ name: 'fastHand', verity: true });
+        } else {
+            achievements.push({ name: 'fastHand', verity: false });
         }
 
         if (records.rememberNumber >= 1900 || records.rememberWords >= 1900 || records.memorySquare >= 5000) {
-            achievements.goodMemory = true;
+            achievements.push({ name: 'goodMemory', verity: true });
+        } else {
+            achievements.push({ name: 'goodMemory', verity: false });
         }
 
         if (records.coloredWords >= 2000) {
-            achievements.attentiveness = true;
+            achievements.push({ name: 'attentiveness', verity: true });
+        } else {
+            achievements.push({ name: 'attentiveness', verity: false });
         }
 
         req.achievements = achievements;
