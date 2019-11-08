@@ -80,20 +80,18 @@ export const totalFriendRecord = async (req: ReqWithPayload, res: Response, next
             };
         });
 
-        let myInfo: any;
 
         let sorted = friendRecords.sort((a: any, b: any) => b.totalRecord - a.totalRecord);
         sorted = sorted.map((item: any, index: number) => {
             if (item.username === myUsername) {
-                myInfo = { ...item, position: index + 1 };
+                return false
             }
 
             return { ...item, position: index + 1 };
-        });
+        }).filter(Boolean);
 
         res.json({
             status: 'accepted',
-            myRecord: myInfo,
             records: sorted
         });
 

@@ -1,18 +1,39 @@
 import { Response, NextFunction } from 'express';
-import { User } from '../models';
+import { User } from '../../../models';
+import { check, validationResult } from 'express-validator';
+import { cleanUnnecessary } from '../../../util';
 
-export const getAchievementsMiddleware = async (req: any, res: Response, next: NextFunction) => {
+export const achievementsMiddleware = [
+    check('username')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'username is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'username is empty' })
+        .bail()
+        .custom(async (value) => {
+            const exists = await User.findOne({ username: value });
+            if (!exists) { return Promise.reject({ statusCode: 3, message: 'user doesnt exists' }); }
+        }),
+
+    check('totalRecord')
+        .trim()
+        .exists().withMessage({ statusCode: 1, message: 'totalRecord is required' })
+        .bail()
+        .not().isEmpty().withMessage({ statusCode: 2, message: 'totalRecord is empty' })
+]
+
+export const achievements = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.user;
+        const { username, totalRecord } = req.body
 
-        let myUserId = id
+        const errors = validationResult(req);
 
-        if (req.params.username) {
-            const { _id } = await User.findOne({ username: req.params.username })
-            myUserId = _id
+        if (!errors.isEmpty()) {
+            const cleaned = cleanUnnecessary(errors.array());
+            return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { records } = await User.findById(myUserId).populate('records');
+        const { records, uid } = await User.findOne({ username })
 
         let achievements: any = {
             fastHand: false,
@@ -27,8 +48,6 @@ export const getAchievementsMiddleware = async (req: any, res: Response, next: N
         if (records.shulteTable >= 15000) { achievements.fastHand = true; }
         if (records.rememberNumber >= 1900 || records.rememberWords >= 1900 || records.memorySquare >= 5000) { achievements.goodMemory = true; }
         if (records.coloredWords >= 2000) { achievements.attentiveness = true; }
-
-        const { totalRecord } = req.myWorldRecord;
 
         if (totalRecord >= 0) { req.league = 'bronze'; req.star = 1; }
         if (totalRecord >= 10000) { req.star = 2; }
@@ -53,9 +72,13 @@ export const getAchievementsMiddleware = async (req: any, res: Response, next: N
             verity: achievements[item]
         }));
 
-        req.achievements = achievementsArr;
-
-        next();
+        res.json({
+            star: req.star,
+            league: req.league,
+            username,
+            uid,
+            achievements: achievementsArr
+        })
 
 
     }

@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, separateWorldRecord, friendRequest, friendReject, friendAccept, separateFriendRecord, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, separateWorldRecordValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, separateFriendRecordValidate, totalWorldRecord, totalFriendRecord, gameInfoTotal, getAchievements } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, separateWorldRecord, friendRequest, friendReject, friendAccept, separateFriendRecord, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, separateWorldRecordValidate, getList, userInfo, logout, verifyToken, gameInfo, gameInfoValidate, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, separateFriendRecordValidate, totalWorldRecord, totalFriendRecord, gameInfoTotal, achievements, achievementsMiddleware, deleteFriend, deleteFriendValidate } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler, separateFriendRecordMiddleware, separateWorldRecordMiddleware, separateWorldRecordMiddlewareValidate, totalFriendRecordMiddleware, totalWorldRecordMiddleware, getAchievementsMiddleware } from './middlewares';
 
@@ -74,6 +74,7 @@ app.post('/api/record', auth.required, createRatingValidate, createRating);
 app.get('/api/games-list', auth.required, getList);
 app.post('/api/game-info', auth.required, separateWorldRecordMiddlewareValidate, separateWorldRecordMiddleware, separateFriendRecordMiddleware, gameInfo);
 app.get('/api/game-info', auth.required, totalFriendRecordMiddleware, totalWorldRecordMiddleware, getAchievementsMiddleware, gameInfoTotal);
+app.post('/api/foreign-game-info', auth.required, achievementsMiddleware, achievements);
 app.post('/api/update-record', auth.required, updateRecord);
 // Friend
 app.post('/api/request', auth.required, friendRequestValidate, friendRequest);
@@ -82,8 +83,7 @@ app.post('/api/reject', auth.required, friendRejectValidate, friendReject);
 app.get('/api/status-outgoing', auth.required, getStatusesOutgoing);
 app.get('/api/status-incoming', auth.required, getStatusesIncoming);
 app.get('/api/request-list', auth.required, requestList);
-// Achievements
-app.get('/api/achievements', auth.required, getAchievements);
+app.post('/api/friend-delete', auth.required, deleteFriendValidate, deleteFriend)
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);

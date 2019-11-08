@@ -1,4 +1,5 @@
 export * from './accept';
+export * from './delete';
 export * from './reject';
 export * from './request';
 export * from './request-list';

@@ -1,1 +1,1 @@
-export * from './get-achievements';
+export * from './post-achievement';
