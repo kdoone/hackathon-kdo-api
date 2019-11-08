@@ -28,6 +28,7 @@ export const friendRecordCertainService = async (user: any, body: any): Promise<
             }
         },
         { $unwind: '$friends' },
+        { $match: { 'friends.status': { $eq: 3 } } },
         {
             $lookup: {
                 from: 'users',
