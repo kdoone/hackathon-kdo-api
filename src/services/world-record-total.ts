@@ -1,8 +1,8 @@
 import { User } from '../models';
-import { ReqWithPayload } from '../types';
-export const worldRecordTotalService = async (req: ReqWithPayload): Promise<{ myWorldRecord: any; worldRecords: any }> => {
 
-    const { username: myUsername } = req.user;
+export const worldRecordTotalService = async (user: any): Promise<{ myWorldRecord: any; worldRecords: any }> => {
+
+    const { username: myUsername } = user;
 
     const arrTotal: any = await User.aggregate([
         {
