@@ -1,16 +1,11 @@
 import { Response, NextFunction } from 'express';
 import { User } from '../models';
+import { worldRecordTotalService } from '../services';
 
 export const getAchievementsMiddleware = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const { id } = req.user;
-
-        let myUserId = id
-
-        if (req.params.username) {
-            const { _id } = await User.findOne({ username: req.params.username })
-            myUserId = _id
-        }
+        const { id: myUserId } = req.user;
+        const { myWorldRecord, worldRecords } = await worldRecordTotalService(req);
 
         const { records } = await User.findById(myUserId).populate('records');
 
@@ -28,7 +23,7 @@ export const getAchievementsMiddleware = async (req: any, res: Response, next: N
         if (records.rememberNumber >= 1900 || records.rememberWords >= 1900 || records.memorySquare >= 5000) { achievements.goodMemory = true; }
         if (records.coloredWords >= 2000) { achievements.attentiveness = true; }
 
-        const { totalRecord } = req.myWorldRecord;
+        const { totalRecord } = myWorldRecord;
 
         if (totalRecord >= 0) { req.league = 'bronze'; req.star = 1; }
         if (totalRecord >= 10000) { req.star = 2; }
@@ -53,6 +48,8 @@ export const getAchievementsMiddleware = async (req: any, res: Response, next: N
             verity: achievements[item]
         }));
 
+        req.worldRecords = worldRecords;
+        req.myWorldRecord = myWorldRecord;
         req.achievements = achievementsArr;
 
         next();

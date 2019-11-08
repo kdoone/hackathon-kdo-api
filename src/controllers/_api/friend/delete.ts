@@ -15,12 +15,12 @@ export const deleteFriendValidate = [
             const exists = await User.findOne({ username: value });
             if (!exists) { return Promise.reject({ statusCode: 3, message: 'user doesnt exists' }); }
         }),
-]
+];
 
 export const deleteFriend = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
-        const { username } = req.body
+        const { username } = req.body;
 
         const errors = validationResult(req);
 
@@ -29,7 +29,7 @@ export const deleteFriend = async (req: ReqWithPayload, res: Response, next: Nex
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { _id: requestedUserId } = await User.findOne({ username })
+        const { _id: requestedUserId } = await User.findOne({ username });
 
         // Проверяем чтобы юзер не отправил запрос себе        
         if (myUserId == requestedUserId) {
@@ -60,6 +60,6 @@ export const deleteFriend = async (req: ReqWithPayload, res: Response, next: Nex
         res.send({ status: 'accepted', message: 'friend was deleted' });
     }
     catch (err) {
-        next(err)
+        next(err);
     }
-}
+};

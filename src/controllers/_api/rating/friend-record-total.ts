@@ -84,7 +84,7 @@ export const totalFriendRecord = async (req: ReqWithPayload, res: Response, next
         let sorted = friendRecords.sort((a: any, b: any) => b.totalRecord - a.totalRecord);
         sorted = sorted.map((item: any, index: number) => {
             if (item.username === myUsername) {
-                return false
+                return false;
             }
 
             return { ...item, position: index + 1 };

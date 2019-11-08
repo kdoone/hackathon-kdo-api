@@ -3,14 +3,14 @@ import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
 import { Rating } from '../../../models';
 
-export const gameInfoValidate = [
+export const gameInfoCertainValidate = [
     check('game')
         .trim()
         .exists().withMessage({ statusCode: 1, message: 'game is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'game is empty' })
 ];
-export const gameInfo = async (req: any, res: Response, next: NextFunction) => {
+export const gameInfoCertain = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
         const { game: gameName } = req.body;

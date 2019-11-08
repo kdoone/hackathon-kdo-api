@@ -20,11 +20,11 @@ export const achievementsMiddleware = [
         .exists().withMessage({ statusCode: 1, message: 'totalRecord is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'totalRecord is empty' })
-]
+];
 
 export const achievements = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const { username, totalRecord } = req.body
+        const { username, totalRecord } = req.body;
 
         const errors = validationResult(req);
 
@@ -33,7 +33,7 @@ export const achievements = async (req: any, res: Response, next: NextFunction) 
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { records, uid } = await User.findOne({ username })
+        const { records, uid } = await User.findOne({ username });
 
         let achievements: any = {
             fastHand: false,
@@ -78,7 +78,7 @@ export const achievements = async (req: any, res: Response, next: NextFunction) 
             username,
             uid,
             achievements: achievementsArr
-        })
+        });
 
 
     }

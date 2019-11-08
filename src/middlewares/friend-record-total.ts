@@ -6,7 +6,7 @@ const { ObjectId } = Types;
 
 export const totalFriendRecordMiddleware = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const { id: myUserId, username: myUsername } = req.user;
+        const { id: myUserId } = req.user;
 
         const aggregated = await User.aggregate([
             { $match: { _id: ObjectId(myUserId) } },
@@ -28,6 +28,7 @@ export const totalFriendRecordMiddleware = async (req: any, res: Response, next:
                 }
             },
             { $unwind: '$friends' },
+            { $match: { 'friends.status': { $eq: 3 } } },
             {
                 $lookup: {
                     from: 'users',
@@ -41,7 +42,7 @@ export const totalFriendRecordMiddleware = async (req: any, res: Response, next:
                 $group: {
                     _id: '$friends.recipient._id',
                     records: { $first: '$friends.recipient.records' },
-                    username: { $first: '$friends.recipient.username' }
+                    username: { $first: '$friends.recipient.username' },
                 }
             },
             {
@@ -57,15 +58,14 @@ export const totalFriendRecordMiddleware = async (req: any, res: Response, next:
                 $group: {
                     _id: '$_id',
                     username: { $first: '$username' },
-                    records: { $first: '$records' }
+                    records: { $first: '$records' },
                 }
             },
             { $project: { 'records._id': 0, 'records.user': 0, 'records.email': 0, 'records.__v': 0 } },
+
         ]);
 
-        const { records } = await User.findById(myUserId, 'records -_id').populate({ path: 'records', select: '-_id -user -email -__v' });
         const recordsDoc = aggregated.slice();
-        recordsDoc.push({ records: records.toObject(), username: myUsername });
 
         const friendRecords = recordsDoc.map(({ username, records }: any) => {
             const arr = Object.keys(records);
@@ -81,13 +81,7 @@ export const totalFriendRecordMiddleware = async (req: any, res: Response, next:
 
 
         let sorted = friendRecords.sort((a: any, b: any) => b.totalRecord - a.totalRecord);
-        sorted = sorted.map((item: any, index: number) => {
-            if (item.username === myUsername) {
-                return false
-            }
-
-            return { ...item, position: index + 1 };
-        }).filter(Boolean);
+        sorted = sorted.map((item: any, index: number) => ({ ...item, position: index + 1 })).filter(Boolean);
 
         req.friendRecords = sorted;
 
