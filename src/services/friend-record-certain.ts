@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import { User } from '../models';
-import { totalRecord } from '../util';
 
 const { ObjectId } = Types;
 

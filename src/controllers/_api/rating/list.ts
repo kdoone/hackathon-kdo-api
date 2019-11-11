@@ -13,6 +13,7 @@ export const getList = async (req: ReqWithPayload, res: Response, next: NextFunc
             }).lean();
 
         const recordsToArray = Object.keys(records).map((key) => ({
+            gameName: key,
             name: key,
             record: records[key]
         }));
@@ -20,7 +21,7 @@ export const getList = async (req: ReqWithPayload, res: Response, next: NextFunc
         const recordsToArrayMultilanguage = recordsToArray.map((item: any) => ({
             ...item,
             name: res.__(item.name)
-        }))
+        }));
 
         res.json({
             status: 'accepted',

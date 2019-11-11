@@ -46,7 +46,7 @@ app.use(
     express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
 );
 app.use(i18n.init);
-app.use(setLanguage)
+app.use(setLanguage);
 
 // Passport config
 import './config/passport';
