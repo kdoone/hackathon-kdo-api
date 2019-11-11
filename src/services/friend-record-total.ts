@@ -1,11 +1,12 @@
 import { Types } from 'mongoose';
 import { User } from '../models';
+import { totalRecord } from '../util';
 
 const { ObjectId } = Types;
 
 export const friendRecordTotalService = async (user: any): Promise<{ friendRecords: any }> => {
 
-    const { id: myUserId } = user;
+    const { id: myUserId, username: myUsername } = user;
 
     const aggregated = await User.aggregate([
         { $match: { _id: ObjectId(myUserId) } },
@@ -64,7 +65,10 @@ export const friendRecordTotalService = async (user: any): Promise<{ friendRecor
 
     ]);
 
+    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' })
+
     const recordsDoc = aggregated.slice();
+    recordsDoc.push({ username: myUsername, records: records.toObject() })
 
     const friendRecords = recordsDoc.map(({ username, records }: any) => {
         const arr = Object.keys(records);
@@ -80,7 +84,7 @@ export const friendRecordTotalService = async (user: any): Promise<{ friendRecor
 
 
     let sorted = friendRecords.sort((a: any, b: any) => b.totalRecord - a.totalRecord);
-    sorted = sorted.map((item: any, index: number) => ({ ...item, position: index + 1 })).filter(Boolean);
+    sorted = sorted.map((item: any, index: number) => ({ ...item, position: index + 1 }));
 
     return {
         friendRecords: sorted

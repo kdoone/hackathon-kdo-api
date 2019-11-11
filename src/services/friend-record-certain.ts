@@ -1,11 +1,12 @@
 import { Types } from 'mongoose';
 import { User } from '../models';
+import { totalRecord } from '../util';
 
 const { ObjectId } = Types;
 
 export const friendRecordCertainService = async (user: any, body: any): Promise<{ friendRecords: any }> => {
 
-    const { id: myUserId } = user;
+    const { id: myUserId, username: myUsername } = user;
     const { game: gameName } = body;
 
     const aggregated = await User.aggregate([
@@ -64,7 +65,19 @@ export const friendRecordCertainService = async (user: any, body: any): Promise<
         { $sort: { record: -1 } }
     ]);
 
+    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' })
+
+    const myRecord = totalRecord(records)
+
+    let arr = aggregated.slice()
+    arr.push({ _id: myUserId, username: myUsername, record: myRecord })
+
+    arr = arr.sort((a: any, b: any) => b.record - a.record);
+    arr = arr.map((item: any, index: number) => {
+        return { ...item, position: index + 1 };
+    });
+
     return {
-        friendRecords: aggregated
+        friendRecords: arr
     };
 };
