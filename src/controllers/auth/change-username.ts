@@ -7,8 +7,6 @@ import { ReqWithPayload } from '../../types';
 export const changeUsernameValidate = [
     check('username')
         .trim()
-        .isAlpha('en-US').withMessage({ statusCode: 13, message: 'not english characters' })
-        .bail()
         .exists().withMessage({ statusCode: 1, message: 'username is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'username is empty' })

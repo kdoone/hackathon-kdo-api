@@ -31,7 +31,6 @@ export const registerValidate = [
 
     check('username')
         .trim()
-        .isAlpha('en-US').withMessage({ statusCode: 13, message: 'not english characters' })
         .exists().withMessage({ statusCode: 9, message: 'username is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 10, message: 'username is empty' })
