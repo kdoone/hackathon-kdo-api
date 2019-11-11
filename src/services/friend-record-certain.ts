@@ -67,10 +67,8 @@ export const friendRecordCertainService = async (user: any, body: any): Promise<
 
     const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' }).lean();
 
-    const myRecord = totalRecord(records);
-
     let arr = aggregated.slice();
-    arr.push({ _id: myUserId, username: myUsername, record: myRecord });
+    arr.push({ _id: myUserId, username: myUsername, record: records[gameName] });
 
     arr = arr.sort((a: any, b: any) => b.record - a.record);
     arr = arr.map((item: any, index: number) => {
