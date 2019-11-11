@@ -6,13 +6,11 @@ export const getList = async (req: ReqWithPayload, res: Response, next: NextFunc
     try {
         const { id: myUserId } = req.user;
 
-        const recordsDoc: any = await User.findById(myUserId)
+        const { records }: any = await User.findById(myUserId)
             .populate({
                 path: 'records',
                 select: '-_id -__v -user -email'
-            });
-
-        const { records } = recordsDoc.toObject();
+            }).lean();
 
         const recordsToArray = Object.keys(records).map((key) => ({
             name: key,

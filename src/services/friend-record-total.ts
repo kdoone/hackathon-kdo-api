@@ -1,6 +1,5 @@
 import { Types } from 'mongoose';
 import { User } from '../models';
-import { totalRecord } from '../util';
 
 const { ObjectId } = Types;
 
@@ -65,10 +64,10 @@ export const friendRecordTotalService = async (user: any): Promise<{ friendRecor
 
     ]);
 
-    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' });
+    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' }).lean();
 
     const recordsDoc = aggregated.slice();
-    recordsDoc.push({ username: myUsername, records: records.toObject() });
+    recordsDoc.push({ username: myUsername, records });
 
     const friendRecords = recordsDoc.map(({ username, records }: any) => {
         const arr = Object.keys(records);

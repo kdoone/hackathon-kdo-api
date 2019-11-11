@@ -65,7 +65,7 @@ export const friendRecordCertainService = async (user: any, body: any): Promise<
         { $sort: { record: -1 } }
     ]);
 
-    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' });
+    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' }).lean();
 
     const myRecord = totalRecord(records);
 

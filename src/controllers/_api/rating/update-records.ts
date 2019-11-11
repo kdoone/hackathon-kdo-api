@@ -7,8 +7,7 @@ export const updateRecord = async (req: ReqWithPayload, res: Response, next: Nex
         const { id: myUserId } = req.user;
         const { localRecords = {} } = req.body;
 
-        let records: any = await Rating.findOne({ user: myUserId }, '-_id -user -__v');
-        records = records.toObject();
+        let records: any = await Rating.findOne({ user: myUserId }, '-_id -user -__v').lean();
 
         const updatedRecords: any = {};
 
