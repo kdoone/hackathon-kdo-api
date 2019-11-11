@@ -7,6 +7,7 @@ import { Types } from 'mongoose';
 export const registerValidate = [
     check('email')
         .trim()
+        .bail()
         .exists().withMessage({ statusCode: 1, message: 'email is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'email is empty' })
@@ -30,6 +31,7 @@ export const registerValidate = [
 
     check('username')
         .trim()
+        .isAlpha('en-US').withMessage({ statusCode: 13, message: 'not english characters' })
         .exists().withMessage({ statusCode: 9, message: 'username is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 10, message: 'username is empty' })

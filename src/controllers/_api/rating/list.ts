@@ -19,9 +19,14 @@ export const getList = async (req: ReqWithPayload, res: Response, next: NextFunc
             record: records[key]
         }));
 
+        const recordsToArrayMultilanguage = recordsToArray.map((item: any) => ({
+            ...item,
+            name: res.__(item.name)
+        }))
+
         res.json({
             status: 'accepted',
-            records: recordsToArray
+            records: recordsToArrayMultilanguage
         });
     }
     catch (err) {

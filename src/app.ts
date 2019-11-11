@@ -7,7 +7,8 @@ import { authenticate } from 'passport';
 // Controllers
 import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain } from './controllers';
 import { checkUserAgent } from './util';
-import { checkToken, errorHandler } from './middlewares';
+import { checkToken, errorHandler, setLanguage } from './middlewares';
+import i18n from 'i18n';
 
 // Create Express server
 const app = express();
@@ -28,6 +29,11 @@ const connectToDb = async (): Promise<void> => {
 };
 connectToDb();
 
+i18n.configure({
+    locales: ['en', 'ru', 'kz', 'es'],
+    directory: __dirname + '/public/locales'
+});
+
 // Initialize all routes
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, '../views'));
@@ -39,6 +45,8 @@ app.use(urlencoded({ extended: true }));
 app.use(
     express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
 );
+app.use(i18n.init);
+app.use(setLanguage)
 
 // Passport config
 import './config/passport';
@@ -87,5 +95,4 @@ app.post('/api/friend-delete', auth.required, deleteFriendValidate, deleteFriend
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);
-
 export default app;

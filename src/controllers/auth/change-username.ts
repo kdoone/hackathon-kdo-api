@@ -7,6 +7,8 @@ import { ReqWithPayload } from '../../types';
 export const changeUsernameValidate = [
     check('username')
         .trim()
+        .isAlpha('en-US').withMessage({ statusCode: 13, message: 'not english characters' })
+        .bail()
         .exists().withMessage({ statusCode: 1, message: 'username is required' })
         .bail()
         .not().isEmpty().withMessage({ statusCode: 2, message: 'username is empty' })
@@ -28,7 +30,7 @@ export const changeUsername = async (req: ReqWithPayload, res: Response, next: N
 
         await User.findByIdAndUpdate(myUserId, { username });
 
-        res.json({ status: 'acccepted', message: 'username changed' });
+        res.json({ status: 'accepted', message: 'username changed' });
 
     }
     catch (err) {

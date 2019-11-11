@@ -65,10 +65,10 @@ export const friendRecordTotalService = async (user: any): Promise<{ friendRecor
 
     ]);
 
-    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' })
+    const { records } = await User.findById(myUserId).populate({ path: 'records', select: '-_id -__v -email -user' });
 
     const recordsDoc = aggregated.slice();
-    recordsDoc.push({ username: myUsername, records: records.toObject() })
+    recordsDoc.push({ username: myUsername, records: records.toObject() });
 
     const friendRecords = recordsDoc.map(({ username, records }: any) => {
         const arr = Object.keys(records);

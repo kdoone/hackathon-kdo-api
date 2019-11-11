@@ -4,5 +4,5 @@ export const totalRecord = (obj: any): number => {
         return prev + obj[cur];
     }, 0);
 
-    return totalRecord
-}
+    return totalRecord;
+};
