@@ -10,6 +10,7 @@ export const gameInfoCertain = async (req: any, res: Response, next: NextFunctio
 
         res.json({
             game: gameName,
+            gameName: res.__(gameName),
             record,
             worldRecords: req.worldRecords,
             myWorldRecord: req.myWorldRecord,

@@ -8,5 +8,9 @@
     "rememberWords": "Remember Words",
     "memorySquare": "Memory Square",
     "coloredFigures": "Colored Figures",
-    "coloredWords": "Colored Words"
+    "coloredWords": "Colored Words",
+    "hour": "h",
+    "hours": "h",
+    "minute": "min",
+    "minutes": "min"
 }
