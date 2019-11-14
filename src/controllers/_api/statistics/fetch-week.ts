@@ -11,6 +11,8 @@ export const fetchWeek = async (req: Request, res: Response, next: NextFunction)
 
         const { totalActivity } = Week;
 
+        const addTotal = (arr: Array<any>) => arr.map((item: any) => ({ ...item, total: (item.hour * 60) + item.minut }));
+
         if (idx === -1) {
             return res.json(false);
         }
@@ -19,14 +21,14 @@ export const fetchWeek = async (req: Request, res: Response, next: NextFunction)
             return res.json({
                 prev: false,
                 cur: totalActivity(allWeeks[0].week),
-                week: allWeeks[0].week,
+                week: addTotal(allWeeks[0].week),
             });
         }
 
         return res.json({
             prev: totalActivity(allWeeks[idx - 1].week),
             cur: totalActivity(allWeeks[idx].week),
-            week: allWeeks[0].week,
+            week: addTotal(allWeeks[0].week),
         });
 
     }

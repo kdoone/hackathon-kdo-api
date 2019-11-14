@@ -47,6 +47,7 @@ WeekSchema.statics.totalActivity = (arr: Array<any>): { hour: number; minut: num
             minut: prev.minut + cur.minut
         };
     }, { hour: 0, minut: 0 });
+    total.total = (total.hour * 60) + total.minut;
     return total;
 };
 
