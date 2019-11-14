@@ -71,7 +71,8 @@ export const achievementsService = async (id: any, myWorldRecord: any, friendRec
     if (isAllGamesPassed) achievements.curiosity = true;
 
     const achievementsArr = Object.keys(achievements).map(item => ({
-        name: res.__(item),
+        name: item,
+        translate: res.__(item),
         verity: achievements[item]
     }));
 
