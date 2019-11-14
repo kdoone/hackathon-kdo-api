@@ -14,7 +14,8 @@ export const gameInfoCertain = async (req: any, res: Response, next: NextFunctio
             record,
             worldRecords: req.worldRecords,
             myWorldRecord: req.myWorldRecord,
-            friendRecords: req.friendRecords
+            friendRecords: req.friendRecords,
+            myFriendRecord: req.myFriendRecord
         });
 
     }

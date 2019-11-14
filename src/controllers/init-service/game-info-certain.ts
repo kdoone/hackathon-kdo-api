@@ -18,12 +18,13 @@ export const gameInfoCertainInit = async (req: any, res: Response, next: NextFun
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { friendRecords } = await friendRecordCertainService(req.user, req.body);
+        const { friendRecords, myFriendRecord } = await friendRecordCertainService(req.user, req.body);
         const { worldRecords, myWorldRecord } = await worldRecordCertainService(req.body, req.user);
 
         req.friendRecords = friendRecords;
         req.worldRecords = worldRecords;
         req.myWorldRecord = myWorldRecord;
+        req.myFriendRecord = myFriendRecord;
 
         next();
     }

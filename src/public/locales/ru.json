@@ -12,5 +12,17 @@
     "hour": "ч",
     "hours": "ч",
     "minute": "мин",
-    "minutes": "мин"
+    "minutes": "мин",
+    "fastHand": "Быстрые руки",
+    "goodMemory": "Отличная память",
+    "attentiveness": "Внимательность",
+    "bronze": "Бронзовый призер",
+    "silver": "Серебряный призер",
+    "gold": "Золотой призер",
+    "firstAmongFriends": "Первый среди друзей",
+    "topHundred": "Топ 100 мира",
+    "curiosity": "Любопытный",
+    "fiveDaysRow": "5 дней подряд",
+    "tenDaysRow": "10 дняй подряд",
+    "friendly": "Дружелюбный"
 }

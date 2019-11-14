@@ -12,5 +12,17 @@
     "hour": "h",
     "hours": "h",
     "minute": "min",
-    "minutes": "min"
+    "minutes": "min",
+    "fastHand": "Mano rápida",
+    "goodMemory": "Buena memoria",
+    "attentiveness": "Atención",
+    "bronze": "Medallista de bronce",
+    "silver": "Medallista de plata",
+    "gold": "Medallista de oro",
+    "firstAmongFriends": "1 entre amigos",
+    "topHundred": "Top 100 del mundo",
+    "curiosity": "Curiosidad",
+    "fiveDaysRow": "5 días seguidos",
+    "tenDaysRow": "10 días seguidos",
+    "friendly": "Amistoso"
 }

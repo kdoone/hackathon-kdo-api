@@ -3,7 +3,7 @@ import { User } from '../models';
 
 const { ObjectId } = Types;
 
-export const friendRecordCertainService = async (user: any, body: any): Promise<{ friendRecords: any }> => {
+export const friendRecordCertainService = async (user: any, body: any): Promise<{ friendRecords: any; myFriendRecord: any }> => {
 
     const { id: myUserId, username: myUsername } = user;
     const { game: gameName } = body;
@@ -69,12 +69,19 @@ export const friendRecordCertainService = async (user: any, body: any): Promise<
     let arr = aggregated.slice();
     arr.push({ _id: myUserId, username: myUsername, record: records[gameName] });
 
+    let myFriendRecord: any;
+
     arr = arr.sort((a: any, b: any) => b.record - a.record);
     arr = arr.map((item: any, index: number) => {
+        if (item.username === myUsername) {
+            myFriendRecord = { ...item, position: index + 1 };
+        }
+
         return { ...item, position: index + 1 };
     });
 
     return {
-        friendRecords: arr
+        friendRecords: arr,
+        myFriendRecord
     };
 };

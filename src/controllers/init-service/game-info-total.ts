@@ -3,11 +3,12 @@ import { friendRecordTotalService, worldRecordTotalService, achievementsService 
 
 export const gameInfoTotalInit = async (req: any, res: Response, next: NextFunction) => {
     try {
-        const { friendRecords } = await friendRecordTotalService(req.user);
+        const { friendRecords, myFriendRecord } = await friendRecordTotalService(req.user);
         const { myWorldRecord, worldRecords } = await worldRecordTotalService(req.user);
-        const { achievements, league, star } = await achievementsService(req.user.id, myWorldRecord.totalRecord);
+        const { achievements, league, star } = await achievementsService(req.user.id, myWorldRecord, friendRecords, myFriendRecord, res);
 
         req.friendRecords = friendRecords;
+        req.myFriendRecord = myFriendRecord;
         req.myWorldRecord = myWorldRecord;
         req.worldRecords = worldRecords;
         req.achievements = achievements;

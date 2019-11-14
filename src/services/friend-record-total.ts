@@ -3,7 +3,7 @@ import { User } from '../models';
 
 const { ObjectId } = Types;
 
-export const friendRecordTotalService = async (user: any): Promise<{ friendRecords: any }> => {
+export const friendRecordTotalService = async (user: any): Promise<{ friendRecords: any; myFriendRecord: any }> => {
 
     const { id: myUserId, username: myUsername } = user;
 
@@ -81,12 +81,20 @@ export const friendRecordTotalService = async (user: any): Promise<{ friendRecor
         };
     });
 
+    let myFriendRecord: any;
 
     let sorted = friendRecords.sort((a: any, b: any) => b.totalRecord - a.totalRecord);
-    sorted = sorted.map((item: any, index: number) => ({ ...item, position: index + 1 }));
+    sorted = sorted.map((item: any, index: number) => {
+        if (item.username === myUsername) {
+            myFriendRecord = { ...item, position: index + 1 };
+        }
+
+        return { ...item, position: index + 1 };
+    });
 
     return {
-        friendRecords: sorted
+        friendRecords: sorted,
+        myFriendRecord
     };
 
 };
