@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express';
 import { User } from '../../../models';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
-import { achievementsService, friendRecordTotalService } from '../../../services';
+import { achievementsService, friendRecordTotalService, worldRecordTotalService } from '../../../services';
 
 export const foreignGameInfoValidate = [
     check('username')
@@ -32,12 +32,13 @@ export const foreignGameInfo = async (req: any, res: Response, next: NextFunctio
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        const { username, totalRecord } = req.body;
+        const { username } = req.body;
 
         const { uid, _id } = await User.findOne({ username });
         const { friendRecords, myFriendRecord } = await friendRecordTotalService({ id: _id, username });
+        const { myWorldRecord } = await worldRecordTotalService({ username });
 
-        const { league, star, achievements } = await achievementsService(_id, totalRecord, friendRecords, myFriendRecord, res);
+        const { league, star, achievements } = await achievementsService(_id, myWorldRecord, friendRecords, myFriendRecord, res);
 
         res.json({
             star,
