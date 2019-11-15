@@ -11,13 +11,24 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         const idx = monthStatistics.findIndex(({ month }: any) => month.find(({ date }: any) => date === currentDate));
 
+        const transformDate = (date: string) => {
+            const [year, month, day] = date.split('-');
+            const formattedDate = `${month}/${day}/${year}`;
+            return formattedDate;
+        };
+
+        const mapMonthStatistics = monthStatistics.slice().map((item: any) => {
+            const newMonth = item.month.slice().map(({ date, total }: any) => [transformDate(date), total]);
+            return { ...item, month: newMonth };
+        });
+
         if (idx === -1) {
             return res.json(false);
         }
 
         res.json({
-            currentMonth: monthStatistics[idx].month,
-            allMonth: monthStatistics.slice(idx)
+            currentMonth: mapMonthStatistics[idx].month,
+            allMonth: mapMonthStatistics.slice(idx)
         });
 
     }
