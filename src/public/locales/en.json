@@ -24,5 +24,15 @@
     "curiosity": "Curiosity",
     "fiveDaysRow": "5 days in row",
     "tenDaysRow": "10 days in row",
-    "friendly": "Friendly"
+    "friendly": "Friendly",
+    "email already in use": "Email already in use",
+    "username is already on use": "Username is already on use",
+    "Cannot validate due to email": "Cannot validate due to email",
+    "user doesnt exists": "User doesnt exists",
+    "is not equal to previous password": "Is not equal to previous password",
+    "cant request myself": "Cant request myself",
+    "request already exists": "Request already exists",
+    "email doesnt exists": "Email doesnt exists",
+    "Incorrect email": "Incorrect email",
+    "Incorrect password": "Incorrect password"
 }

@@ -24,5 +24,15 @@
     "curiosity": "Қызығушы",
     "fiveDaysRow": "5 күн қатарынан",
     "tenDaysRow": "10 күн қатарынан",
-    "friendly": "Тату"
+    "friendly": "Тату",
+    "email already in use": "Бұл email қолданыста",
+    "username is already on use": "Бұл логин қолданыста",
+    "Cannot validate due to email": "Email дұрыс емес",
+    "user doesnt exists": "Ондай қолданушы жоқ",
+    "is not equal to previous password": "Парольдер сәйкес келмейді",
+    "cant request myself": "Сұранысты өзіне жіберуге болмайды",
+    "request already exists": "Ондай сұраныс бар",
+    "email doesnt exists": "Ондай email жоқ",
+    "Incorrect email": "Email дұрыс емес",
+    "Incorrect password": "Пароль дұрыс емес"
 }

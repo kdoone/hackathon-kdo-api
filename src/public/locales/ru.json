@@ -24,5 +24,15 @@
     "curiosity": "Любопытный",
     "fiveDaysRow": "5 дней подряд",
     "tenDaysRow": "10 дняй подряд",
-    "friendly": "Дружелюбный"
+    "friendly": "Дружелюбный",
+    "email already in use": "Данный email уже используется",
+    "username is already on use": "Данный логин уже испольуется",
+    "Cannot validate due to email": "Ошибка связанная с email",
+    "user doesnt exists": "Такого пользователя не существует",
+    "is not equal to previous password": "Пароль не совпадает с предыдущим паролем",
+    "cant request myself": "Невозможно отправить запрос себе",
+    "request already exists": "Запрос уже имеется",
+    "email doesnt exists": "Такого email не существует",
+    "Incorrect email": "Неверный email",
+    "Incorrect password": "Неверный password"
 }

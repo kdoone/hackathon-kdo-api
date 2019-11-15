@@ -24,5 +24,15 @@
     "curiosity": "Curiosidad",
     "fiveDaysRow": "5 días seguidos",
     "tenDaysRow": "10 días seguidos",
-    "friendly": "Amistoso"
+    "friendly": "Amistoso",
+    "email already in use": "Correo electrónico ya en uso",
+    "username is already on use": "nombre de usuario ya está en uso",
+    "Cannot validate due to email": "No se puede validar por correo electrónico",
+    "user doesnt exists": "el usuario no existe",
+    "is not equal to previous password": "no es igual a la contraseña anterior",
+    "cant request myself": "no puedo solicitarme",
+    "request already exists": "solicitud ya existe",
+    "email doesnt exists": "el correo electrónico no existe",
+    "Incorrect email": "Email incorrecto",
+    "Incorrect password": "Contraseña incorrecta"
 }

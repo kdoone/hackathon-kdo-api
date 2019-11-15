@@ -44,7 +44,9 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            const cleaned = cleanUnnecessary(errors.array());
+            let cleaned = cleanUnnecessary(errors.array());
+            cleaned = cleaned.map((item: any) => ({ ...item, message: res.__(item.message) }));
+
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 

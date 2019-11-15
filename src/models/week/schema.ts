@@ -38,6 +38,16 @@ const secondsToHms = (d: number): Time => {
     };
 };
 
+const calculateTotal = (hour: number, minut: number) => {
+    const total = (hour * 60) + minut;
+    if (total === 0) {
+        return 1;
+    }
+
+    return total;
+};
+
+
 WeekSchema.statics.secondsToHms = (d: number) => secondsToHms(d);
 WeekSchema.statics.currentDate = () => new Date().toISOString().slice(0, 10);
 WeekSchema.statics.totalActivity = (arr: Array<any>): { hour: number; minut: number } => {
@@ -47,7 +57,7 @@ WeekSchema.statics.totalActivity = (arr: Array<any>): { hour: number; minut: num
             minut: prev.minut + cur.minut
         };
     }, { hour: 0, minut: 0 });
-    total.total = (total.hour * 60) + total.minut;
+    total.total = calculateTotal(total.hour, total.minut);
     return total;
 };
 

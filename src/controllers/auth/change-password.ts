@@ -46,7 +46,9 @@ export const changePassword = async (req: ReqWithPayload, res: Response, next: N
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            const cleaned = cleanUnnecessary(errors.array());
+            let cleaned = cleanUnnecessary(errors.array());
+            cleaned = cleaned.map((item: any) => ({ ...item, message: res.__(item.message) }));
+
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 

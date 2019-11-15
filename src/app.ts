@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain, updateWeek, updateWeekValidate, fetchWeek, fetchMonth } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain, updateWeek, updateWeekValidate, fetchWeek, fetchMonth, fetchGameData } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler, setLanguage } from './middlewares';
 import i18n from 'i18n';
@@ -96,6 +96,7 @@ app.post('/api/friend-delete', auth.required, deleteFriendValidate, deleteFriend
 app.post('/api/week', auth.required, updateWeekValidate, updateWeek);
 app.get('/api/week', auth.required, fetchWeek);
 app.get('/api/month', auth.required, fetchMonth);
+app.get('/api/game-data', auth.required, fetchGameData);
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);

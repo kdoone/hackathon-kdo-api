@@ -22,7 +22,9 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            const cleaned = cleanUnnecessary(errors.array());
+            let cleaned = cleanUnnecessary(errors.array());
+            cleaned = cleaned.map((item: any) => ({ ...item, message: res.__(item.message) }));
+
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
@@ -37,7 +39,7 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
         } else if (username) {
             requestedUserId = username._id;
         } else {
-            return res.status(200).json({ statusCode: 4, message: 'this user doesnt exists' });
+            return res.status(200).json({ statusCode: 4, message: 'user doesnt exists' });
         }
 
         // Проверка чтобы не отправил запрос самому себе

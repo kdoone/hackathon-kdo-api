@@ -11,7 +11,16 @@ export const fetchWeek = async (req: Request, res: Response, next: NextFunction)
 
         const { totalActivity } = Week;
 
-        const addTotal = (arr: Array<any>) => arr.map((item: any) => ({ ...item, total: (item.hour * 60) + item.minut }));
+        const calculateTotal = (hour: number, minut: number) => {
+            const total = (hour * 60) + minut;
+            if (total === 0) {
+                return 1;
+            }
+
+            return total;
+        };
+
+        const addTotal = (arr: Array<any>) => arr.map((item: any) => ({ ...item, total: calculateTotal(item.hour, item.minut) }));
 
         if (idx === -1) {
             return res.json(false);
