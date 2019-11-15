@@ -39,17 +39,17 @@ export const friendRequest = async (req: ReqWithPayload, res: Response, next: Ne
         } else if (username) {
             requestedUserId = username._id;
         } else {
-            return res.status(200).json({ statusCode: 4, message: 'user doesnt exists' });
+            return res.status(200).json({ statusCode: 4, message: res.__('user doesnt exists') });
         }
 
         // Проверка чтобы не отправил запрос самому себе
         if (myUserId == requestedUserId) {
-            return res.status(200).json({ statusCode: 5, message: 'cant request myself' });
+            return res.status(200).json({ statusCode: 5, message: res.__('cant request myself') });
         }
 
         // Проверяем, существует ли такой запрос
         const isRequestExists = await Friend.isRequestExists(myUserId, requestedUserId);
-        if (isRequestExists) return res.status(200).json({ statusCode: 6, message: 'request already exists' });
+        if (isRequestExists) return res.status(200).json({ statusCode: 6, message: res.__('request already exists') });
 
         const docA = await Friend.findOneAndUpdate(
             { requester: myUserId, recipient: requestedUserId },
