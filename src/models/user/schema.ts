@@ -20,6 +20,7 @@ export interface UserDocument extends Document {
     records: any;
     token: string;
     weekStatistics: Array<any>;
+    monthStatistics: Array<any>;
 }
 
 export interface UserModel extends Model<UserDocument> {
@@ -44,6 +45,7 @@ export const UserSchema = new Schema({
         default: ''
     },
     weekStatistics: [{ type: ObjectId, ref: 'Week' }],
+    monthStatistics: [{ type: ObjectId, ref: 'Month' }],
 }, { timestamps: true });
 
 UserSchema.methods.setPassword = function (this: UserDocument, password: string): void {

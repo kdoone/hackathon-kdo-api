@@ -1,8 +1,9 @@
 import { Response, NextFunction } from 'express';
 import { ReqWithPayload } from '../../../types/req-with-payload';
-import { Rating } from '../../../models';
+import { Rating, User } from '../../../models';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../../util';
+import { updateMonth } from '../../../services';
 
 export const createRatingValidate = [
     check('game')
@@ -63,14 +64,25 @@ export const createRating = async (req: ReqWithPayload, res: Response, next: Nex
             return res.status(200).json({ status: 'rejected', errors: cleaned });
         }
 
-        await Rating.findOneAndUpdate(
-            { user: myUserId },
-            { [gameName]: record },
-        );
+        const { records } = await User.findById(myUserId, 'records').populate('records').lean();
+
+        await updateMonth(req, res, record);
+
+        if (record > records[gameName]) {
+            await Rating.findOneAndUpdate(
+                { user: myUserId },
+                { [gameName]: record },
+            );
+
+            return res.json({
+                status: 'accepted',
+                message: 'rating was updated'
+            });
+        }
 
         res.json({
             status: 'accepted',
-            message: 'rating was updated'
+            message: 'rating was not updated'
         });
 
     }
