@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain, updateWeek, updateWeekValidate, fetchWeek, fetchMonth, fetchGameData } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain, updateWeek, updateWeekValidate, fetchWeek, fetchMonth, fetchGameData, fetchRadar } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler, setLanguage } from './middlewares';
 import i18n from 'i18n';
@@ -97,6 +97,7 @@ app.post('/api/week', auth.required, updateWeekValidate, updateWeek);
 app.get('/api/week', auth.required, fetchWeek);
 app.get('/api/month', auth.required, fetchMonth);
 app.get('/api/game-data', auth.required, fetchGameData);
+app.get('/api/radar', auth.required, fetchRadar);
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);
