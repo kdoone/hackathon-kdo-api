@@ -1,11 +1,17 @@
 import { Response, Request, NextFunction } from 'express';
-import { Week } from '../../../models';
+import { Week, User } from '../../../models';
 
-export const fetchWeek = async (req: Request, res: Response, next: NextFunction) => {
+export const fetchWeek = async (req: any, res: Response, next: NextFunction) => {
     try {
+        const { id: myUserId } = req.user;
+
         const currentDate = Week.currentDate();
 
-        const allWeeks = await Week.find({}, 'week').populate('weekStatistics').lean();
+        const { weekStatistics: allWeeks } = await User.findById(myUserId, 'weekStatistics').populate('weekStatistics').lean();
+
+        if (!allWeeks.length) {
+            return res.json(false);
+        }
 
         const idx = allWeeks.findIndex(({ week }: any) => week.find(({ date }: any) => date === currentDate));
 
