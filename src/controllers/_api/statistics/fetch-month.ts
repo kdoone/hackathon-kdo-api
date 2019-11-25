@@ -9,6 +9,10 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
         const { monthStatistics } = await User.findById(myUserId, 'monthStatistics').populate({ path: 'monthStatistics', select: '-user' }).lean();
         const currentDate = getCurrentDate();
 
+        if (!monthStatistics) {
+            return res.json(false);
+        }
+
         const idx = monthStatistics.findIndex(({ month }: any) => month.find(({ date }: any) => date === currentDate));
 
         const transformDate = (date: string) => {
@@ -19,7 +23,12 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         const mapMonthStatistics = monthStatistics.slice().map((item: any) => {
             const newMonth = item.month.slice().map(({ date, total }: any) => [transformDate(date), total]);
-            return { ...item, month: newMonth };
+            const totalOfNewMonth = newMonth.reduce((prev: any, cur: any) => {
+                const [date, record] = cur;
+                return prev + record;
+            }, 0);
+
+            return { ...item, month: newMonth, total: totalOfNewMonth };
         });
 
         if (idx === -1) {
@@ -28,7 +37,7 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         res.json({
             currentMonth: mapMonthStatistics[idx].month,
-            allMonth: mapMonthStatistics.slice(idx)
+            allMonth: mapMonthStatistics.slice(idx).map((item: any) => ({ ...item, month: item.total }))
         });
 
     }

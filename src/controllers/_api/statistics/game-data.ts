@@ -7,6 +7,12 @@ export const fetchGameData = async (req: any, res: Response, next: NextFunction)
 
         const { records } = await User.findById(myUserId, 'records').populate({ path: 'records', select: '-_id -__v -user -email' }).lean();
 
+        const isAllEmpty = records.slice().every((item: any) => item.record === 0);
+
+        if (isAllEmpty) {
+            return res.json(false);
+        }
+
         const recordsNumber = Object.keys(records).map((item: any) => records[item]);
         const recordsString = Object.keys(records).map((item: any) => res.__(item));
 
