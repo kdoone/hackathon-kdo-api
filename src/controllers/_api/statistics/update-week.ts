@@ -29,7 +29,7 @@ export const updateWeek = async (req: ReqWithPayload, res: Response, next: NextF
         const weekExists = await Week.exists({ 'week.date': currentDate });
 
         if (weekExists) {
-            await Week.findOneAndUpdate({ 'week.date': currentDate }, { $inc: { 'week.$.hour': hour, 'week.$.minut': minut } });
+            await Week.findOneAndUpdate({ 'week.date': currentDate, user: myUserId }, { $inc: { 'week.$.hour': hour, 'week.$.minut': minut } });
         } else {
             const newWeek = new Week({ user: myUserId });
             newWeek.setWeek(seconds, currentDate, res);

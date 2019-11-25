@@ -89,8 +89,8 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
             const formatted = `${monthToStat}/${day}/${year}`;
 
-            if (allMonth[index]) {
-                const [date, record] = allMonth[index];
+            if (index === 10) {
+                const [date, record] = allMonth[0];
 
                 return [formatted, record];
             }
