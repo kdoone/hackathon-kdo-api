@@ -35,13 +35,27 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
             return res.json(false);
         }
 
+        let prevTotal = 0, currentTotal = 0;
+
+        if (mapMonthStatistics[idx - 1]) {
+            const [dat, prevTotalSlice] = mapMonthStatistics[idx - 1].month[0];
+            prevTotal = prevTotalSlice;
+        }
+
+        const allMonth = mapMonthStatistics.slice(idx).map((item: any) => {
+            const [date, record] = item.month[0];
+
+            currentTotal = item.total;
+
+            return [date, item.total];
+        });
+
+
         res.json({
             currentMonth: mapMonthStatistics[idx].month,
-            allMonth: mapMonthStatistics.slice(idx).map((item: any) => {
-                const [date, record] = item.month[0];
-
-                return [date, item.total];
-            })
+            allMonth,
+            prevTotal,
+            currentTotal
         });
 
     }
