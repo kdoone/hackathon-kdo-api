@@ -37,7 +37,11 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         res.json({
             currentMonth: mapMonthStatistics[idx].month,
-            allMonth: mapMonthStatistics.slice(idx).map((item: any) => ({ ...item, month: item.total }))
+            allMonth: mapMonthStatistics.slice(idx).map((item: any) => {
+                const [date, record] = item.month[0];
+
+                return [date, item.total];
+            })
         });
 
     }
