@@ -7,7 +7,7 @@ export const updateMonth = async (req: any, res: Response, total: number) => {
     const { id: myUserId } = req.user;
 
     const currentDate = getCurrentDate();
-    const monthExists = await Month.exists({ 'month.date': currentDate });
+    const monthExists = await Month.exists({ 'month.date': currentDate, user: myUserId });
 
     if (monthExists) {
         await Month.findOneAndUpdate({ 'month.date': currentDate, user: myUserId }, { $inc: { 'month.$.total': total } });
