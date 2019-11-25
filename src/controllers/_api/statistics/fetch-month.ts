@@ -53,27 +53,7 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
         const sixMonth = Array(6).fill(null).map((item: any, index: number) => {
             const arrMonth = transformDate(currentDate);
             const [month, date, year] = arrMonth.split('/');
-            let monthToStat: any = Number(month) + index;
-
-            if (monthToStat > 12) {
-                monthToStat = `0${monthToStat - 12}`;
-            }
-
-            const formatted = `${monthToStat}/${year}`;
-
-            if (allMonth[index + idx]) {
-                const [date, record] = allMonth[index + idx];
-
-                return [formatted, record];
-            }
-
-            return [formatted, 0];
-        });
-
-        const twelveMonth = Array(12).fill(null).map((item: any, index: number) => {
-            const arrMonth = transformDate(currentDate);
-            const [month, date, year] = arrMonth.split('/');
-            let monthToStat: any = Number(month) + index;
+            let monthToStat: any = Number(month) - index;
 
             if (monthToStat > 12) {
                 const count = monthToStat - 12;
@@ -83,12 +63,34 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
                 }
 
                 monthToStat = `0${count}`;
+            } else if (monthToStat < 10) {
+                monthToStat = `0${monthToStat}`;
             }
 
             const formatted = `${monthToStat}/${year}`;
 
-            if (allMonth[index + idx]) {
-                const [date, record] = allMonth[index + idx];
+            if (allMonth[index - idx]) {
+                const [date, record] = allMonth[index - idx];
+
+                return [formatted, record];
+            }
+
+            return [formatted, 0];
+        }).reverse();
+
+        const twelveMonth = Array(12).fill(null).map((item: any, index: number) => {
+            const arrMonth = transformDate(currentDate);
+            const [month, date, year] = arrMonth.split('/');
+            let monthToStat: any = index + 1;
+
+            if (monthToStat < 10) {
+                monthToStat = `0${monthToStat}`;
+            }
+
+            const formatted = `${monthToStat}/${year}`;
+
+            if (allMonth[index]) {
+                const [date, record] = allMonth[index];
 
                 return [formatted, record];
             }
