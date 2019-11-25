@@ -52,7 +52,7 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         const sixMonth = Array(6).fill(null).map((item: any, index: number) => {
             const arrMonth = transformDate(currentDate);
-            const [month, date, year] = arrMonth.split('/');
+            const [month, day, year] = arrMonth.split('/');
             let monthToStat: any = Number(month) - index;
 
             if (monthToStat > 12) {
@@ -67,7 +67,7 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
                 monthToStat = `0${monthToStat}`;
             }
 
-            const formatted = `${monthToStat}/${year}`;
+            const formatted = `${monthToStat}/${day}/${year}`;
 
             if (allMonth[index - idx]) {
                 const [date, record] = allMonth[index - idx];
@@ -80,14 +80,14 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
 
         const twelveMonth = Array(12).fill(null).map((item: any, index: number) => {
             const arrMonth = transformDate(currentDate);
-            const [month, date, year] = arrMonth.split('/');
+            const [month, day, year] = arrMonth.split('/');
             let monthToStat: any = index + 1;
 
             if (monthToStat < 10) {
                 monthToStat = `0${monthToStat}`;
             }
 
-            const formatted = `${monthToStat}/${year}`;
+            const formatted = `${monthToStat}/${day}/${year}`;
 
             if (allMonth[index]) {
                 const [date, record] = allMonth[index];
