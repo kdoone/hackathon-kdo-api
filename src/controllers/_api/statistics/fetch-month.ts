@@ -50,10 +50,56 @@ export const fetchMonth = async (req: any, res: Response, next: NextFunction) =>
             return [date, item.total];
         });
 
+        const sixMonth = Array(6).fill(null).map((item: any, index: number) => {
+            const arrMonth = transformDate(currentDate);
+            const [month, date, year] = arrMonth.split('/');
+            let monthToStat: any = Number(month) + index;
+
+            if (monthToStat > 12) {
+                monthToStat = `0${monthToStat - 12}`;
+            }
+
+            const formatted = `${monthToStat}/${year}`;
+
+            if (allMonth[index + idx]) {
+                const [date, record] = allMonth[index + idx];
+
+                return [formatted, record];
+            }
+
+            return [formatted, 0];
+        });
+
+        const twelveMonth = Array(12).fill(null).map((item: any, index: number) => {
+            const arrMonth = transformDate(currentDate);
+            const [month, date, year] = arrMonth.split('/');
+            let monthToStat: any = Number(month) + index;
+
+            if (monthToStat > 12) {
+                const count = monthToStat - 12;
+                if (count >= 10 && count <= 12) {
+                    monthToStat = count;
+                    return;
+                }
+
+                monthToStat = `0${count}`;
+            }
+
+            const formatted = `${monthToStat}/${year}`;
+
+            if (allMonth[index + idx]) {
+                const [date, record] = allMonth[index + idx];
+
+                return [formatted, record];
+            }
+
+            return [formatted, 0];
+        });
 
         res.json({
             currentMonth: mapMonthStatistics[idx].month,
-            allMonth,
+            sixMonth,
+            twelveMonth,
             prevTotal,
             currentTotal
         });
