@@ -5,7 +5,7 @@ import compression from 'compression';  // compresses requests
 import path from 'path';
 import { authenticate } from 'passport';
 // Controllers
-import { notFound, register, login, resetPassword, changePassword, friendRequest, friendReject, friendAccept, friendRecordCertain, createRating, getStatusesOutgoing, getStatusesIncoming, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, createRatingValidate, getRatingValidate, getRating, getList, userInfo, logout, verifyToken, gameInfoCertain, updateRecord, deleteUser, changeUsername, changeUsernameValidate, friendRequestValidate, friendRejectValidate, friendAcceptValidate, requestList, friendRecordTotal, gameInfoTotal, deleteFriend, deleteFriendValidate, gameInfoTotalInit, gameInfoCertainInit, foreignGameInfo, foreignGameInfoValidate, worldRecordTotal, worldRecordCertain, updateWeek, updateWeekValidate, fetchWeek, fetchMonth, fetchGameData, fetchRadar } from './controllers';
+import { notFound, register, login, resetPassword, changePassword, isUsernameUnique, isEmailUnique, registerValidate, loginValidate, changePasswordValidate, resetPaswordValidate, isEmailUniqueValidate, isUsernameUniqueValidate, userInfo, logout, verifyToken, deleteUser, changeUsername, changeUsernameValidate, } from './controllers';
 import { checkUserAgent } from './util';
 import { checkToken, errorHandler, setLanguage } from './middlewares';
 import i18n from 'i18n';
@@ -17,7 +17,7 @@ const app = express();
 const connectToDb = async (): Promise<void> => {
     try {
         await connect(
-            'mongodb://localhost:27017/boom-brains',
+            'mongodb://localhost:27017/hackathon',
             { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true }
         );
 
@@ -35,7 +35,7 @@ i18n.configure({
 });
 
 // Initialize all routes
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 app.use(cors());
@@ -61,43 +61,19 @@ const auth = {
 };
 
 // Auth
-app.post('/auth/register', registerValidate, checkUserAgent, register);
-app.post('/auth/login', loginValidate, checkUserAgent, login);
-app.post('/auth/reset-password', resetPaswordValidate, checkUserAgent, resetPassword);
-app.post('/auth/change-password', auth.required, changePasswordValidate, changePassword);
-app.post('/auth/exists-email', isEmailUniqueValidate, isEmailUnique);
-app.post('/auth/exists-username', isUsernameUniqueValidate, isUsernameUnique);
-app.get('/auth/user-info', auth.required, userInfo);
-app.get('/auth/logout', auth.required, logout);
-app.get('/auth/verify-token', verifyToken);
-app.post('/auth/delete-user', deleteUser);
-app.post('/auth/username', auth.required, changeUsernameValidate, changeUsername);
-// Records
-app.post('/api/world-record', auth.required, worldRecordCertain);
-app.get('/api/world-record', auth.required, worldRecordTotal);
-app.post('/api/friend-record', auth.required, friendRecordCertain);
-app.get('/api/friend-record', auth.required, friendRecordTotal);
-app.post('/api/get-record', auth.required, getRatingValidate, getRating);
-app.post('/api/record', auth.required, createRatingValidate, createRating);
-app.get('/api/games-list', auth.required, getList);
-app.post('/api/game-info', auth.required, gameInfoCertainInit, gameInfoCertain);
-app.get('/api/game-info', auth.required, gameInfoTotalInit, gameInfoTotal);
-app.post('/api/foreign-game-info', auth.required, foreignGameInfoValidate, foreignGameInfo);
-app.post('/api/update-record', auth.required, updateRecord);
-// Friend
-app.post('/api/request', auth.required, friendRequestValidate, friendRequest);
-app.post('/api/accept', auth.required, friendAcceptValidate, friendAccept);
-app.post('/api/reject', auth.required, friendRejectValidate, friendReject);
-app.get('/api/status-outgoing', auth.required, getStatusesOutgoing);
-app.get('/api/status-incoming', auth.required, getStatusesIncoming);
-app.get('/api/request-list', auth.required, requestList);
-app.post('/api/friend-delete', auth.required, deleteFriendValidate, deleteFriend);
-// Statistics
-app.post('/api/week', auth.required, updateWeekValidate, updateWeek);
-app.get('/api/week', auth.required, fetchWeek);
-app.get('/api/month', auth.required, fetchMonth);
-app.get('/api/game-data', auth.required, fetchGameData);
-app.get('/api/radar', auth.required, fetchRadar);
+app.post('/api/register', registerValidate, checkUserAgent, register);
+app.post('/api/login', loginValidate, checkUserAgent, login);
+app.post('/api/reset-password', resetPaswordValidate, checkUserAgent, resetPassword);
+app.post('/api/change-password', auth.required, changePasswordValidate, changePassword);
+app.post('/api/exists-email', isEmailUniqueValidate, isEmailUnique);
+app.post('/api/exists-username', isUsernameUniqueValidate, isUsernameUnique);
+app.get('/api/user-info', auth.required, userInfo);
+app.get('/api/logout', auth.required, logout);
+app.get('/api/verify-token', verifyToken);
+app.post('/api/delete-user', deleteUser);
+app.post('/api/username', auth.required, changeUsernameValidate, changeUsername);
+
+
 // Error handling
 app.get('*', notFound);
 app.use(errorHandler);

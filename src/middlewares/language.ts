@@ -1,8 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { ReqWithPayload } from '../types';
 import i18n from 'i18n';
 
-export const setLanguage = (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const setLanguage = (req: any, res: Response, next: NextFunction) => {
 
     if (req.get('App-Language')) {
         if (req.get('App-Language') === 'kk') {

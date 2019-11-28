@@ -1,8 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { ReqWithPayload } from '../../types/req-with-payload';
 import { User } from '../../models';
 
-export const logout = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const logout = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
 

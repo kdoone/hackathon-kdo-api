@@ -2,7 +2,6 @@ import { Response, NextFunction } from 'express';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../util';
 import { User } from '../../models';
-import { ReqWithPayload } from '../../types';
 
 export const changeUsernameValidate = [
     check('username')
@@ -14,7 +13,7 @@ export const changeUsernameValidate = [
         .isLength({ max: 32 }).withMessage({ statusCode: 3, message: 'username shall not exceed 64 characters' })
 ];
 
-export const changeUsername = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const changeUsername = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { id: myUserId } = req.user;
         const { username } = req.body;

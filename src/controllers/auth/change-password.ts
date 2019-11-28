@@ -1,6 +1,5 @@
 import { Response, NextFunction } from 'express';
 import { User } from '../../models';
-import { ReqWithPayload } from '../../types/req-with-payload';
 import { check, validationResult } from 'express-validator';
 import { cleanUnnecessary } from '../../util';
 
@@ -37,7 +36,7 @@ export const changePasswordValidate = [
         .isLength({ max: 32 }).withMessage({ statusCode: 8, message: 'shall not exceed 16 characters' })
 ];
 
-export const changePassword = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const changePassword = async (req: any, res: Response, next: NextFunction) => {
     try {
 
         const { id, email } = req.user;

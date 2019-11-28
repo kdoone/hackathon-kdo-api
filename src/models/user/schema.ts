@@ -2,8 +2,6 @@ import { Schema, Document, Model } from 'mongoose';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import generator from 'generate-password';
-
-const { ObjectId } = Schema.Types;
 export interface UserDocument extends Document {
     email: string;
     salt: string;
@@ -16,17 +14,11 @@ export interface UserDocument extends Document {
     setPassword: (password: string) => any;
     validatePassword: (password: string) => any;
     setUid: () => void;
-    friends: any;
-    records: any;
-    token: string;
-    weekStatistics: Array<any>;
-    monthStatistics: Array<any>;
 }
 
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
     isUsernameExists: (username: string) => Promise<any>;
-    getId: (key: string, value: any) => Promise<any>;
 }
 
 export const UserSchema = new Schema({
@@ -38,14 +30,10 @@ export const UserSchema = new Schema({
     hash: String,
     salt: String,
     uid: String,
-    friends: [{ type: ObjectId, ref: 'Friend' }],
-    records: { type: ObjectId, ref: 'Rating' },
     token: {
         type: String,
         default: ''
     },
-    weekStatistics: [{ type: ObjectId, ref: 'Week' }],
-    monthStatistics: [{ type: ObjectId, ref: 'Month' }],
 }, { timestamps: true });
 
 UserSchema.methods.setPassword = function (this: UserDocument, password: string): void {
@@ -66,18 +54,6 @@ UserSchema.methods.validatePassword = function (this: UserDocument, password: st
     return this.hash === hash;
 };
 
-UserSchema.statics.isEmailExists = async function (email: string): Promise<any> {
-    return this.exists({ email });
-};
-
-UserSchema.statics.isUsernameExists = async function (username: string): Promise<any> {
-    return this.exists({ username });
-};
-
-UserSchema.statics.getId = async function (key: string, value: any): Promise<any> {
-    return this.findOne({ [key]: value });
-};
-
 UserSchema.methods.generateJWT = async function (this: UserDocument): Promise<string> {
     const token = jwt.sign({
         email: this.email,
@@ -87,6 +63,14 @@ UserSchema.methods.generateJWT = async function (this: UserDocument): Promise<st
     await this.updateOne({ token });
 
     return token;
+};
+
+UserSchema.statics.isEmailExists = async function (email: string): Promise<any> {
+    return this.exists({ email });
+};
+
+UserSchema.statics.isUsernameExists = async function (username: string): Promise<any> {
+    return this.exists({ username });
 };
 
 interface AuthJson {

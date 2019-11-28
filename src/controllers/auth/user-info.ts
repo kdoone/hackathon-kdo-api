@@ -1,7 +1,6 @@
 import { Response, NextFunction } from 'express';
-import { ReqWithPayload } from '../../types/req-with-payload';
 
-export const userInfo = async (req: ReqWithPayload, res: Response, next: NextFunction) => {
+export const userInfo = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { id, email, username, uid }: any = req.user;
 
