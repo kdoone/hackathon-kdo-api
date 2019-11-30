@@ -2,13 +2,8 @@ import { Schema, Document, Model } from 'mongoose';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import generator from 'generate-password';
-export interface UserDocument extends Document {
-    email: string;
-    salt: string;
-    hash: string;
-    user: any;
-    uid: string;
-    username: string;
+
+export interface UserDocument extends GlobalUser, Document {
     generateJWT: () => string;
     toAuthJSON: () => AuthJson;
     setPassword: (password: string) => any;
@@ -18,7 +13,6 @@ export interface UserDocument extends Document {
 
 export interface UserModel extends Model<UserDocument> {
     isEmailExists: (email: string) => Promise<any>;
-    isUsernameExists: (username: string) => Promise<any>;
 }
 
 export const UserSchema = new Schema({
@@ -26,10 +20,24 @@ export const UserSchema = new Schema({
         type: String,
         index: true
     },
-    username: String,
     hash: String,
     salt: String,
     uid: String,
+    firstName: String,
+    lastName: String,
+    patronymic: String,
+    uin: Number,
+    udNumber: Number,
+    udCity: String,
+    udByWhom: String,
+    udFromDate: String,
+    udToDate: String,
+    liveCity: String,
+    loanConditions: Number,
+    phoneNumber: String,
+    placeOfWork: String,
+    category: Number,
+    position: String,
     token: {
         type: String,
         default: ''
@@ -69,10 +77,6 @@ UserSchema.statics.isEmailExists = async function (email: string): Promise<any> 
     return this.exists({ email });
 };
 
-UserSchema.statics.isUsernameExists = async function (username: string): Promise<any> {
-    return this.exists({ username });
-};
-
 interface AuthJson {
     status: string;
     statusCode: number;
@@ -80,7 +84,6 @@ interface AuthJson {
     email: string;
     token: string;
     uid: string;
-    username: string;
 }
 
 UserSchema.methods.toAuthJSON = async function (this: UserDocument): Promise<AuthJson> {
@@ -91,7 +94,6 @@ UserSchema.methods.toAuthJSON = async function (this: UserDocument): Promise<Aut
         statusCode: 0,
         _id: this._id,
         email: this.email,
-        username: this.username,
         token,
         uid: this.uid
     };

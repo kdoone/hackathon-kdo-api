@@ -5,18 +5,18 @@ import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import { User } from '../models';
 
 passport.use(new LocalStrategy({
-    usernameField: 'email',
+    usernameField: 'phoneNumber',
     passwordField: 'password',
     session: false
-}, (email, password, done: any) => {
-    User.findOne({ email }, (err, user) => {
+}, (phoneNumber, password, done: any) => {
+    User.findOne({ phoneNumber }, (err, user) => {
         if (err) return done(err);
 
         // if email is incorrect
         if (!user) return done(null, false, {
             status: 'rejected',
             statusCode: 1,
-            message: 'Incorrect email'
+            message: 'Incorrect phoneNumber'
         });
 
         // if password is incorrect
