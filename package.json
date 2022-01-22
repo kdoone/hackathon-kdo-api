@@ -51,7 +51,7 @@
         "migrate-mongo": "^6.0.2",
         "moment": "^2.24.0",
         "mongoose": "^5.7.1",
-        "node-fetch": "^2.6.0",
+        "node-fetch": "^3.1.1",
         "nodemailer": "^6.3.0",
         "passport": "^0.4.0",
         "passport-facebook": "^3.0.0",
