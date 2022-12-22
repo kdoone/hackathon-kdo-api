@@ -45,7 +45,7 @@
         "generate-password": "^1.4.2",
         "http-errors": "^1.7.3",
         "i18n": "^0.8.4",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "lodash": "^4.17.15",
         "lusca": "^1.6.1",
         "migrate-mongo": "^6.0.2",
